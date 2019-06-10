@@ -43,5 +43,5 @@ function getClasses() {
 }
 
 $.when(getClasses()).then(function(data) {
-    console.log(data);
+    $("#root").html("this worked");
 });
