@@ -1,47 +1,62 @@
-/* global $
-   global localStorage
-*/
+/* global $ */
+
+// I know this isn't good practice, but this is just for educational purposes!
 const client_id = "9f6b9ba0b39245708f42e5f93cd1114f";
 const client_secret = "gR6CowcHZDJa5LU348yBI0uhDkGSzTbn";
 
-var token = localStorage.getItem("access_token") || null;
-var expires_at = localStorage.getItem("expires_at") || null;
+let formData = new FormData();
+formData.append("grant_type", "client_credentials");
 
-function getToken() {
-    if (token === null || expires_at < Date.now()) {
-        return $.ajax({
+// No CORS headers on auction house data request. This proxies the request to bypass this.
+const proxyURL = "https://cors-anywhere.herokuapp.com/";
+
+let token = null;
+
+const getToken = () => {
+    if (token === null || token.expires_at < Date.now()) {
+        return window.fetch("https://eu.battle.net/oauth/token", {
                 method: "POST",
-                url: "https://eu.battle.net/oauth/token",
-                beforeSend: function(xhr) {
-                    xhr.setRequestHeader("Authorization", "Basic " + window.btoa(client_id + ":" + client_secret));
+                headers: {
+                    Authorization: 'Basic ' + window.btoa(`${client_id}:${client_secret}`)
                 },
-                data: {
-                    grant_type: "client_credentials"
-                }
+                body: formData
             })
-            .then(function(data) {
-                localStorage.setItem("access_token", data.access_token);
-                localStorage.setItem("expires_at", Date.now() + parseInt(data.expires_in, 10));
-                return data.access_token;
+            .then(response => response.json())
+            .then(response => {
+                token = { access_token: response.access_token, expires_at: Date.now() + parseInt(response.expires_in * 1000, 10) };
+                return response.access_token;
             });
     }
     else {
-        console.log("inside else");
-        return token;
+        return Promise.resolve(token.access_token);
     }
-}
+};
 
-function getClasses() {
+const getDumpURL = () => {
     return getToken()
-        .then(function(token) {
-            console.log(token);
-            return $.getJSON("https://eu.api.blizzard.com/wow/data/character/classes", { access_token: token })
-                .then(function(data) {
-                    return $(data.classes).map(function() {
-                        return { id: this.id, name: this.name };
-                    });
+        .then(token => {
+            return window.fetch("https://eu.api.blizzard.com/wow/auction/data/ragnaros?locale=en_GB", {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+                .then(response => response.json())
+                .then(response => {
+                    return response.files[0].url;
                 });
         });
-}
+};
 
-getClasses();
+const getAHData = () => {
+    return getDumpURL()
+        .then(dumpURL => {
+            return window.fetch(proxyURL + dumpURL)
+                .then(response => response.json())
+                .then(response => {
+                    console.log(response);
+                });
+        });
+};
+
+getAHData();
