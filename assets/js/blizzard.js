@@ -8,7 +8,7 @@ let formData = new FormData();
 formData.append("grant_type", "client_credentials");
 
 // No CORS headers on auction house data request. This proxies the request to bypass this.
-const proxyURL = "https://cors-anywhere.herokuapp.com/";
+const proxyURL = "http://localhost:8080/";
 
 let token = null;
 
@@ -60,7 +60,6 @@ const getAHData = () => {
       .fetch(proxyURL + dumpURL)
       .then(response => response.json())
       .then(response => {
-        console.log(response.auctions);
         return response.auctions;
       });
   });
@@ -68,24 +67,21 @@ const getAHData = () => {
 
 const getItems = itemID => {
   return getAHData().then(data => {
-    let count = 0,
-      cost = 0;
+    let items = [];
     data.forEach(d => {
       if (d.item == itemID) {
-        count += d.quantity;
-        cost += d.buyout;
+        items.push(d);
       }
     });
-    let average = cost / count;
-    let gold = Math.trunc(average / 10000);
-    let silver = Math.trunc((average % 10000) / 100);
-    let copper = Math.trunc((average % 10000) % 100);
-    $("#root").html(
-      `There is ${count} of Tidespray Linen available on AH, at an average price of ${gold} g ${silver} s ${copper} c.`
-    );
+    return items;
   });
 };
 
-const parseData = data;
-
-getItems(152576);
+getItems(152576).then(items => {
+  let count = 0,
+    cost = 0;
+  items.forEach(item => {
+    cost += item.buyout > 0 ? item.buyout : item.bid;
+    count += item.quantity;
+  });
+});
