@@ -77,11 +77,27 @@ const getItems = itemID => {
   });
 };
 
-getItems(152576).then(items => {
-  let count = 0,
-    cost = 0;
-  items.forEach(item => {
-    cost += item.buyout > 0 ? item.buyout : item.bid;
-    count += item.quantity;
+const getRegionRealms = region => {
+  return getToken().then(token => {
+    window
+      .fetch(
+        `https://${region}.api.blizzard.com/data/wow/realm/index?namespace=dynamic-${region}&locale=en_GB&access_token=${token}`
+      )
+      .then(response => response.json())
+      .then(response => {
+        $("#root").html(`<div class="form-group"></div>`);
+        $(".form-group").html(
+          `<label for="realmSelect">Select Realm</label><select id="realmSelect" class="form-control"></select>`
+        );
+        for (const realm of response.realms) {
+          $("#realmSelect").append(
+            `<option value="${realm.slug}">${realm.name}</option>`
+          );
+        }
+        $("#realmSelect option")
+          .sort((a, b) => ($(b).text() < $(a).text() ? 1 : -1))
+          .appendTo("#realmSelect");
+        $("#realmSelect").prop("selectedIndex", 0);
+      });
   });
-});
+};
