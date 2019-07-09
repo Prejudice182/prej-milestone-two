@@ -39,8 +39,7 @@ const getDumpURL = realm => {
   return getToken().then(token => {
     return window
       .fetch(
-        `https://eu.api.blizzard.com/wow/auction/data/${realm}?locale=en_GB`,
-        {
+        `https://eu.api.blizzard.com/wow/auction/data/${realm}?locale=en_GB`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`
@@ -53,6 +52,7 @@ const getDumpURL = realm => {
       });
   });
 };
+
 /*
 End of retrieval code. You can test this in your console if you would like to see it running.
 Do this by running the command: 
@@ -61,3 +61,74 @@ and checking the response URL.
 You can replace "ragnaros" with any other available EU realm for World of Warcraft, found here:
 https://worldofwarcraft.com/en-gb/game/status
 */
+
+let items = [coarseLeather = [],
+  tidesprayLinen = [],
+  deepSeaSatin = [],
+  shimmerscale = [],
+  mistscale = [],
+  bloodStainedBone = [],
+  calcifiedBone = [],
+  tempestHide = []
+];
+
+const getItemsData = auctions => {
+  $.each(auctions, (index, value) => {
+    let pricePerItem = value.buyout / value.quantity;
+    switch (value.item) {
+      case 152541:
+        coarseLeather.push(pricePerItem);
+        break;
+      case 152576:
+        tidesprayLinen.push(pricePerItem);
+        break;
+      case 152577:
+        deepSeaSatin.push(pricePerItem);
+        break;
+      case 153050:
+        shimmerscale.push(pricePerItem);
+        break;
+      case 153051:
+        mistscale.push(pricePerItem);
+        break;
+      case 154164:
+        bloodStainedBone.push(pricePerItem);
+        break;
+      case 154165:
+        calcifiedBone.push(pricePerItem);
+        break;
+      case 154722:
+        tempestHide.push(pricePerItem);
+        break;
+    }
+  });
+}
+
+const getAveragePrice = () => {
+  for (let i = 0; i < items.length; i++) {
+    let total = 0;
+    for (let j = 0; j < items[i].length; j++) {
+      total += items[i][j];
+    }
+    let average = total / items[i].length;
+    items[i].push(average);
+    items[i].splice(0, items[i].length - 1);
+  }
+}
+let baseImgDir = "./assets/img/";
+let bsbIcon = baseImgDir + "bloodsoakedbone.jpg";
+let cbIcon = baseImgDir + "calcifiedbone.jpg";
+let clIcon = baseImgDir + "coarseleather.jpg";
+let dssIcon = baseImgDir + "deepseasatin.jpg";
+let msIcon = baseImgDir + "mistscale.jpg";
+let ntIcon = baseImgDir + "nylonthread.jpg";
+let ssIcon = baseImgDir + "shimmerscale.jpg";
+let thIcon = baseImgDir + "tempesthide.jpg";
+let tsIcon = baseImgDir + "tidespraylinen.jpg";
+
+$.getJSON("./assets/js/auctions.json", ahData => {
+  let auctions = ahData.auctions;
+  getItemsData(auctions);
+  getAveragePrice();
+  $("#root").html(`<p><img src="${tsIcon}" alt="Tidespray Linen">Tidespray Linen - Average Price: ${tidesprayLinen[0]}</p>`);
+});
