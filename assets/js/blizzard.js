@@ -1,14 +1,14 @@
-/* global $ */
-
-// I know this isn't good practice, but this is just for educational purposes!
+/* 
+I know this isn't good practice, but this is just for educational purposes!
+The following code will allow me to retrieve the latest AH data for a chosen realm.
+For the purposes of this project, I will use a static copy, as retrieval by automated means
+requires the use of a Node.js server as CORS headers are not enabled on these files.
+*/
 const client_id = "9f6b9ba0b39245708f42e5f93cd1114f";
 const client_secret = "gR6CowcHZDJa5LU348yBI0uhDkGSzTbn";
 
 let formData = new FormData();
 formData.append("grant_type", "client_credentials");
-
-// No CORS headers on auction house data request. This proxies the request to bypass this.
-const proxyURL = "http://localhost:8080/";
 
 let token = null;
 
@@ -35,11 +35,11 @@ const getToken = () => {
   }
 };
 
-const getDumpURL = () => {
+const getDumpURL = realm => {
   return getToken().then(token => {
     return window
       .fetch(
-        "https://eu.api.blizzard.com/wow/auction/data/ragnaros?locale=en_GB",
+        `https://eu.api.blizzard.com/wow/auction/data/${realm}?locale=en_GB`,
         {
           method: "GET",
           headers: {
@@ -53,51 +53,11 @@ const getDumpURL = () => {
       });
   });
 };
-
-const getAHData = () => {
-  return getDumpURL().then(dumpURL => {
-    return window
-      .fetch(proxyURL + dumpURL)
-      .then(response => response.json())
-      .then(response => {
-        return response.auctions;
-      });
-  });
-};
-
-const getItems = itemID => {
-  return getAHData().then(data => {
-    let items = [];
-    data.forEach(d => {
-      if (d.item == itemID) {
-        items.push(d);
-      }
-    });
-    return items;
-  });
-};
-
-const getRegionRealms = region => {
-  return getToken().then(token => {
-    window
-      .fetch(
-        `https://${region}.api.blizzard.com/data/wow/realm/index?namespace=dynamic-${region}&locale=en_GB&access_token=${token}`
-      )
-      .then(response => response.json())
-      .then(response => {
-        $("#root").html(`<div class="form-group"></div>`);
-        $(".form-group").html(
-          `<label for="realmSelect">Select Realm</label><select id="realmSelect" class="form-control"></select>`
-        );
-        for (const realm of response.realms) {
-          $("#realmSelect").append(
-            `<option value="${realm.slug}">${realm.name}</option>`
-          );
-        }
-        $("#realmSelect option")
-          .sort((a, b) => ($(b).text() < $(a).text() ? 1 : -1))
-          .appendTo("#realmSelect");
-        $("#realmSelect").prop("selectedIndex", 0);
-      });
-  });
-};
+/*
+End of retrieval code. You can test this in your console if you would like to see it running.
+Do this by running the command: 
+getDumpURL("ragnaros")
+and checking the response URL.
+You can replace "ragnaros" with any other available EU realm for World of Warcraft, found here:
+https://worldofwarcraft.com/en-gb/game/status
+*/
