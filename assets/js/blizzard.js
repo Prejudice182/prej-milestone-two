@@ -104,6 +104,13 @@ const getItemsData = auctions => {
   });
 }
 
+const getGSCString = (value) => {
+  let gold = Math.floor(value / 10000);
+  let silver = Math.floor((value % 10000) / 100);
+  let copper = Math.floor(value % 100);
+  return `${gold}g ${silver}s ${copper}c`;
+}
+
 const getAveragePrice = () => {
   for (let i = 0; i < items.length; i++) {
     let total = 0;
@@ -115,6 +122,22 @@ const getAveragePrice = () => {
     items[i].splice(0, items[i].length - 1);
   }
 }
+
+const getItemIcon = (itemID) => {
+  return getToken().then(token => {
+    return window.fetch(
+        `https://eu.api.blizzard.com/data/wow/media/item/${itemID}?namespace=static-eu&locale=en_GB`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }).then(response => response.json())
+      .then(response => {
+        console.log(response.assets[0].value);
+      });
+  });
+}
+
 let baseImgDir = "./assets/img/";
 let bsbIcon = baseImgDir + "bloodsoakedbone.jpg";
 let cbIcon = baseImgDir + "calcifiedbone.jpg";
@@ -125,10 +148,13 @@ let ntIcon = baseImgDir + "nylonthread.jpg";
 let ssIcon = baseImgDir + "shimmerscale.jpg";
 let thIcon = baseImgDir + "tempesthide.jpg";
 let tsIcon = baseImgDir + "tidespraylinen.jpg";
+let tsBIcon = baseImgDir + "tsbracers.jpg";
 
 $.getJSON("./assets/js/auctions.json", ahData => {
   let auctions = ahData.auctions;
   getItemsData(auctions);
   getAveragePrice();
-  $("#root").html(`<p><img src="${tsIcon}" alt="Tidespray Linen">Tidespray Linen - Average Price: ${tidesprayLinen[0]}</p>`);
+  $("#root").html(`<p><img src="${tsIcon}" alt="Tidespray Linen">Tidespray Linen - Average Price: ${getGSCString(tidesprayLinen[0])}</p>
+  <p><img src="${ntIcon}" alt="Nylon Thread">Nylon Thread - Vendor Buy: 60s</p>
+  <p><img src="${tsBIcon}" alt="Tidespray Linen Bracers">Tidespray Linen Bracers - Crafting Cost: ${getGSCString((tidesprayLinen[0]*10)+30000)}</p>`);
 });
