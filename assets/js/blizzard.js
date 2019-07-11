@@ -48,7 +48,7 @@ const getDumpURL = realm => {
       )
       .then(response => response.json())
       .then(response => {
-        return response.files[0].url;
+        console.log(response.files[0].url);
       });
   });
 };
@@ -149,17 +149,39 @@ let ssIcon = baseImgDir + "shimmerscale.jpg";
 let thIcon = baseImgDir + "tempesthide.jpg";
 let tsIcon = baseImgDir + "tidespraylinen.jpg";
 let tsBIcon = baseImgDir + "tsbracers.jpg";
+let ssBIcon = baseImgDir + "ssbracers.jpg";
+let clBIcon = baseImgDir + "clbracers.jpg";
+let expIcon = baseImgDir + "expulsom.jpg";
 
 $.getJSON("./assets/js/auctions.json", ahData => {
   let auctions = ahData.auctions;
   getItemsData(auctions);
   getAveragePrice();
-  $("#root").html(`
-  <div class="row">
-    <div class="col-md-6">
+
+  let linenBracers = (tidesprayLinen[0] * 10) + 30000;
+  let scaleBracers = (shimmerscale[0] * 6) + (bloodStainedBone[0] * 4);
+  let leatherBracers = (coarseLeather[0] * 6) + (bloodStainedBone[0] * 4);
+  let expulsom = Math.min(linenBracers, scaleBracers, leatherBracers) / 0.15;
+
+  $(`<div class="row" id="stepone"></div>`).appendTo("#root");
+  $(`<div class="col">
       <p><img src="${tsIcon}" alt="Tidespray Linen">Tidespray Linen - Average Price: ${getGSCString(tidesprayLinen[0])}</p>
       <p><img src="${ntIcon}" alt="Nylon Thread">Nylon Thread - Vendor Buy: 60s</p>
-      <p><img src="${tsBIcon}" alt="Tidespray Linen Bracers">Tidespray Linen Bracers - Crafting Cost: ${getGSCString((tidesprayLinen[0]*10)+30000)}</p>
-    </div>
-  </div>`);
+      <p><img src="${tsBIcon}" alt="Tidespray Linen Bracers">Tidespray Linen Bracers - Crafting Cost: ${getGSCString(linenBracers)}</p>
+    </div>`).appendTo("#stepone");
+  $(`<div class="col">
+      <p><img src="${ssIcon}" alt="Shimmerscale">Shimmerscale - Average Price: ${getGSCString(shimmerscale[0])}</p>
+      <p><img src="${bsbIcon}" alt="Blood-stained Bone">Blood-stained Bone - Average Price: ${getGSCString(bloodStainedBone[0])}</p>
+      <p><img src="${ssBIcon}" alt="Shimmerscale Armguards">Shimmerscale Armguards - Crafting Cost: ${getGSCString(scaleBracers)}</p>
+    </div>`).appendTo("#stepone");
+    $(`<div class="col">
+      <p><img src="${clIcon}" alt="Coarse Leather">Coarse Leather - Average Price: ${getGSCString(coarseLeather[0])}</p>
+      <p><img src="${bsbIcon}" alt="Blood-stained Bone">Blood-stained Bone - Average Price: ${getGSCString(bloodStainedBone[0])}</p>
+      <p><img src="${clBIcon}" alt="Coarse Leather Armguards">Coarse Leather Armguards - Crafting Cost: ${getGSCString(leatherBracers)}</p>
+    </div>`).appendTo("#stepone");
+    $(`<div class="row justify-content-center">
+      <div class="col-4">
+        <p><img src="${expIcon}" alt="Expulsom">Expulsom - Estimated Crafting Cost: ${getGSCString(expulsom)}</p>
+      </div>
+    </div>`).appendTo("#root");
 });
