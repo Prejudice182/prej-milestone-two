@@ -165,9 +165,9 @@ $.getJSON("./assets/js/auctions.json", ahData => {
 
   $(`<div class="row" id="stepone"></div>`).appendTo("#root");
   $(`<div class="col">
-      <p><img src="${tsIcon}" alt="Tidespray Linen">Tidespray Linen - Average Price: ${getGSCString(tidesprayLinen[0])}</p>
-      <p><img src="${ntIcon}" alt="Nylon Thread">Nylon Thread - Vendor Buy: 60s</p>
-      <p><img src="${tsBIcon}" alt="Tidespray Linen Bracers">Tidespray Linen Bracers - Crafting Cost: ${getGSCString(linenBracers)}</p>
+      <p><a href="#" data-wowhead="item=152576"><img src="${tsIcon}" alt="Tidespray Linen">Tidespray Linen</a> - Average Price: ${getGSCString(tidesprayLinen[0])}</p>
+      <p><a href="#" data-wowhead="item=159959"><img src="${ntIcon}" alt="Nylon Thread">Nylon Thread</a> - Vendor Buy: 60s</p>
+      <p><a href="#" data-wowhead="item=154692"><img src="${tsBIcon}" alt="Tidespray Linen Bracers">Tidespray Linen Bracers</a> - Crafting Cost: ${getGSCString(linenBracers)}</p>
     </div>`).appendTo("#stepone");
   $(`<div class="col">
       <p><img src="${ssIcon}" alt="Shimmerscale">Shimmerscale - Average Price: ${getGSCString(shimmerscale[0])}</p>
