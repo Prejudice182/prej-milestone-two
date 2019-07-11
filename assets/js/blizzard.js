@@ -154,7 +154,12 @@ $.getJSON("./assets/js/auctions.json", ahData => {
   let auctions = ahData.auctions;
   getItemsData(auctions);
   getAveragePrice();
-  $("#root").html(`<p><img src="${tsIcon}" alt="Tidespray Linen">Tidespray Linen - Average Price: ${getGSCString(tidesprayLinen[0])}</p>
-  <p><img src="${ntIcon}" alt="Nylon Thread">Nylon Thread - Vendor Buy: 60s</p>
-  <p><img src="${tsBIcon}" alt="Tidespray Linen Bracers">Tidespray Linen Bracers - Crafting Cost: ${getGSCString((tidesprayLinen[0]*10)+30000)}</p>`);
+  $("#root").html(`
+  <div class="row">
+    <div class="col-md-6">
+      <p><img src="${tsIcon}" alt="Tidespray Linen">Tidespray Linen - Average Price: ${getGSCString(tidesprayLinen[0])}</p>
+      <p><img src="${ntIcon}" alt="Nylon Thread">Nylon Thread - Vendor Buy: 60s</p>
+      <p><img src="${tsBIcon}" alt="Tidespray Linen Bracers">Tidespray Linen Bracers - Crafting Cost: ${getGSCString((tidesprayLinen[0]*10)+30000)}</p>
+    </div>
+  </div>`);
 });
