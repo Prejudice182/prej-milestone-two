@@ -61,50 +61,57 @@ and checking the response URL.
 You can replace "ragnaros" with any other available EU realm for World of Warcraft, found here:
 https://worldofwarcraft.com/en-gb/game/status
 */
+let baseImgDir = "./assets/img/";
 
-let items = [coarseLeather = [],
-  tidesprayLinen = [],
-  deepSeaSatin = [],
-  shimmerscale = [],
-  mistscale = [],
-  bloodStainedBone = [],
-  calcifiedBone = [],
-  tempestHide = []
-];
+function Item (id, icon, prices, average) {
+  this.id = id;
+  this.icon = baseImgDir + icon;
+  this.prices = prices || [];
+  this.average = average || 0;
+}
+
+let names = ["coarseLeather", "tidesprayLinen", "deepSeaSatin", "shimmerscale", "mistscale", "bloodStainedBone", "calcifiedBone", "tempestHide", "nylonThread"];
+let ids = [152541, 152576, 152577, 153050, 153051, 154164, 154165, 154722, 159959];
+let icons = ["coarseleather.jpg", "tidespraylinen.jpg", "deepseasatin.jpg", "shimmerscale.jpg", "mistscale.jpg", "bloodstainedbone.jpg", "calcifiedbone.jpg", "tempesthide.jpg", "nylonthread.jpg"];
+
+for (let i = 0; i < names.length; i++) {
+  let val = new Item(ids[i], icons[i]);
+  window[names[i]] = val;
+}
 
 const getItemsData = auctions => {
   $.each(auctions, (index, value) => {
     let pricePerItem = value.buyout / value.quantity;
     switch (value.item) {
       case 152541:
-        coarseLeather.push(pricePerItem);
+        coarseLeather.prices.push(pricePerItem);
         break;
       case 152576:
-        tidesprayLinen.push(pricePerItem);
+        tidesprayLinen.prices.push(pricePerItem);
         break;
       case 152577:
-        deepSeaSatin.push(pricePerItem);
+        deepSeaSatin.prices.push(pricePerItem);
         break;
       case 153050:
-        shimmerscale.push(pricePerItem);
+        shimmerscale.prices.push(pricePerItem);
         break;
       case 153051:
-        mistscale.push(pricePerItem);
+        mistscale.prices.push(pricePerItem);
         break;
       case 154164:
-        bloodStainedBone.push(pricePerItem);
+        bloodStainedBone.prices.push(pricePerItem);
         break;
       case 154165:
-        calcifiedBone.push(pricePerItem);
+        calcifiedBone.prices.push(pricePerItem);
         break;
       case 154722:
-        tempestHide.push(pricePerItem);
+        tempestHide.prices.push(pricePerItem);
         break;
     }
   });
 }
 
-const getGSCString = (value) => {
+const getGSCString = value => {
   let gold = Math.floor(value / 10000);
   let silver = Math.floor((value % 10000) / 100);
   let copper = Math.floor(value % 100);
@@ -112,18 +119,17 @@ const getGSCString = (value) => {
 }
 
 const getAveragePrice = () => {
-  for (let i = 0; i < items.length; i++) {
+  for (let i = 0; i < names.length; i++) {
     let total = 0;
-    for (let j = 0; j < items[i].length; j++) {
-      total += items[i][j];
+    for (let j = 0; j < window[names[i]].prices.length; j++) {
+      total += window[names[i]].prices[j];
     }
-    let average = total / items[i].length;
-    items[i].push(average);
-    items[i].splice(0, items[i].length - 1);
+    let average = total / window[names[i]].prices.length;
+    window[names[i]].average = average;
   }
 }
 
-const getItemIcon = (itemID) => {
+const getItemIcon = itemID => {
   return getToken().then(token => {
     return window.fetch(
         `https://eu.api.blizzard.com/data/wow/media/item/${itemID}?namespace=static-eu&locale=en_GB`, {
@@ -138,16 +144,6 @@ const getItemIcon = (itemID) => {
   });
 }
 
-let baseImgDir = "./assets/img/";
-let bsbIcon = baseImgDir + "bloodsoakedbone.jpg";
-let cbIcon = baseImgDir + "calcifiedbone.jpg";
-let clIcon = baseImgDir + "coarseleather.jpg";
-let dssIcon = baseImgDir + "deepseasatin.jpg";
-let msIcon = baseImgDir + "mistscale.jpg";
-let ntIcon = baseImgDir + "nylonthread.jpg";
-let ssIcon = baseImgDir + "shimmerscale.jpg";
-let thIcon = baseImgDir + "tempesthide.jpg";
-let tsIcon = baseImgDir + "tidespraylinen.jpg";
 let tsBIcon = baseImgDir + "tsbracers.jpg";
 let ssBIcon = baseImgDir + "ssbracers.jpg";
 let clBIcon = baseImgDir + "clbracers.jpg";
@@ -157,26 +153,27 @@ $.getJSON("./assets/js/auctions.json", ahData => {
   let auctions = ahData.auctions;
   getItemsData(auctions);
   getAveragePrice();
+  console.log(tidesprayLinen);
 
-  let linenBracers = (tidesprayLinen[0] * 10) + 30000;
-  let scaleBracers = (shimmerscale[0] * 6) + (bloodStainedBone[0] * 4);
-  let leatherBracers = (coarseLeather[0] * 6) + (bloodStainedBone[0] * 4);
+  let linenBracers = (tidesprayLinen.average * 10) + 30000;
+  let scaleBracers = (shimmerscale.average * 6) + (bloodStainedBone.average * 4);
+  let leatherBracers = (coarseLeather.average * 6) + (bloodStainedBone.average * 4);
   let expulsom = Math.min(linenBracers, scaleBracers, leatherBracers) / 0.15;
 
   $(`<div class="row" id="stepone"></div>`).appendTo("#root");
   $(`<div class="col">
-      <p><a href="#" data-wowhead="item=152576"><img src="${tsIcon}" alt="Tidespray Linen">Tidespray Linen</a> - Average Price: ${getGSCString(tidesprayLinen[0])}</p>
-      <p><a href="#" data-wowhead="item=159959"><img src="${ntIcon}" alt="Nylon Thread">Nylon Thread</a> - Vendor Buy: 60s</p>
+      <p><a href="#" data-wowhead="item=${tidesprayLinen.id}"><img src="${tidesprayLinen.icon}" alt="Tidespray Linen">Tidespray Linen</a> - Average Price: ${getGSCString(tidesprayLinen.average)}</p>
+      <p><a href="#" data-wowhead="item=${nylonThread.id}"><img src="${nylonThread.icon}" alt="Nylon Thread">Nylon Thread</a> - Vendor Buy: 60s</p>
       <p><a href="#" data-wowhead="item=154692"><img src="${tsBIcon}" alt="Tidespray Linen Bracers">Tidespray Linen Bracers</a> - Crafting Cost: ${getGSCString(linenBracers)}</p>
     </div>`).appendTo("#stepone");
   $(`<div class="col">
-      <p><img src="${ssIcon}" alt="Shimmerscale">Shimmerscale - Average Price: ${getGSCString(shimmerscale[0])}</p>
-      <p><img src="${bsbIcon}" alt="Blood-stained Bone">Blood-stained Bone - Average Price: ${getGSCString(bloodStainedBone[0])}</p>
+      <p><img src="${shimmerscale.icon}" alt="Shimmerscale">Shimmerscale - Average Price: ${getGSCString(shimmerscale.average)}</p>
+      <p><img src="${bloodStainedBone.icon}" alt="Blood-stained Bone">Blood-stained Bone - Average Price: ${getGSCString(bloodStainedBone.average)}</p>
       <p><img src="${ssBIcon}" alt="Shimmerscale Armguards">Shimmerscale Armguards - Crafting Cost: ${getGSCString(scaleBracers)}</p>
     </div>`).appendTo("#stepone");
     $(`<div class="col">
-      <p><img src="${clIcon}" alt="Coarse Leather">Coarse Leather - Average Price: ${getGSCString(coarseLeather[0])}</p>
-      <p><img src="${bsbIcon}" alt="Blood-stained Bone">Blood-stained Bone - Average Price: ${getGSCString(bloodStainedBone[0])}</p>
+      <p><img src="${coarseLeather.icon}" alt="Coarse Leather">Coarse Leather - Average Price: ${getGSCString(coarseLeather.average)}</p>
+      <p><img src="${bloodStainedBone.icon}" alt="Blood-stained Bone">Blood-stained Bone - Average Price: ${getGSCString(bloodStainedBone.average)}</p>
       <p><img src="${clBIcon}" alt="Coarse Leather Armguards">Coarse Leather Armguards - Crafting Cost: ${getGSCString(leatherBracers)}</p>
     </div>`).appendTo("#stepone");
     $(`<div class="row justify-content-center">
