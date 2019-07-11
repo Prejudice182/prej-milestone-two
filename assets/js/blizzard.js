@@ -153,32 +153,56 @@ $.getJSON("./assets/js/auctions.json", ahData => {
   let auctions = ahData.auctions;
   getItemsData(auctions);
   getAveragePrice();
-  console.log(tidesprayLinen);
 
   let linenBracers = (tidesprayLinen.average * 10) + 30000;
   let scaleBracers = (shimmerscale.average * 6) + (bloodStainedBone.average * 4);
   let leatherBracers = (coarseLeather.average * 6) + (bloodStainedBone.average * 4);
+  
   let expulsom = Math.min(linenBracers, scaleBracers, leatherBracers) / 0.15;
+  let expItem;
+  if (linenBracers < scaleBracers && linenBracers < leatherBracers)
+    expItem = "Tidespray Linen Bracers";
+  else if (scaleBracers < linenBracers && scaleBracers < leatherBracers)
+    expItem = "Shimmerscale Armguards";
+  else
+    expItem = "Coarse Leather Armguards";
 
-  $(`<div class="row" id="stepone"></div>`).appendTo("#root");
-  $(`<div class="col">
-      <p><a href="#" data-wowhead="item=${tidesprayLinen.id}"><img src="${tidesprayLinen.icon}" alt="Tidespray Linen">Tidespray Linen</a> - Average Price: ${getGSCString(tidesprayLinen.average)}</p>
-      <p><a href="#" data-wowhead="item=${nylonThread.id}"><img src="${nylonThread.icon}" alt="Nylon Thread">Nylon Thread</a> - Vendor Buy: 60s</p>
-      <p><a href="#" data-wowhead="item=154692"><img src="${tsBIcon}" alt="Tidespray Linen Bracers">Tidespray Linen Bracers</a> - Crafting Cost: ${getGSCString(linenBracers)}</p>
-    </div>`).appendTo("#stepone");
-  $(`<div class="col">
-      <p><img src="${shimmerscale.icon}" alt="Shimmerscale">Shimmerscale - Average Price: ${getGSCString(shimmerscale.average)}</p>
-      <p><img src="${bloodStainedBone.icon}" alt="Blood-stained Bone">Blood-stained Bone - Average Price: ${getGSCString(bloodStainedBone.average)}</p>
-      <p><img src="${ssBIcon}" alt="Shimmerscale Armguards">Shimmerscale Armguards - Crafting Cost: ${getGSCString(scaleBracers)}</p>
-    </div>`).appendTo("#stepone");
-    $(`<div class="col">
-      <p><img src="${coarseLeather.icon}" alt="Coarse Leather">Coarse Leather - Average Price: ${getGSCString(coarseLeather.average)}</p>
-      <p><img src="${bloodStainedBone.icon}" alt="Blood-stained Bone">Blood-stained Bone - Average Price: ${getGSCString(bloodStainedBone.average)}</p>
-      <p><img src="${clBIcon}" alt="Coarse Leather Armguards">Coarse Leather Armguards - Crafting Cost: ${getGSCString(leatherBracers)}</p>
-    </div>`).appendTo("#stepone");
+  $(`<div class="row" id="stepOneRow"></div>`).appendTo("#root");
+  $(`<div class="col" id="stepOneCol"></div>`).appendTo("#stepOneRow");
+  $(`<div class="card-group" id="stepOneCardGroup"></div>`).appendTo("#stepOneCol");
+  $(`<div class="card">
+      <div class="card-header">
+        <a href="#" data-wowhead="item=154692"><img src="${tsBIcon}" alt="Tidespray Linen Bracers">Tidespray Linen Bracers</a>
+      </div>
+      <div class="card-body">
+        <p><a href="#" data-wowhead="item=${tidesprayLinen.id}"><img src="${tidesprayLinen.icon}" alt="Tidespray Linen">Tidespray Linen</a> x 10 - Average Price: ${getGSCString(tidesprayLinen.average)}</p>
+        <p><a href="#" data-wowhead="item=${nylonThread.id}"><img src="${nylonThread.icon}" alt="Nylon Thread">Nylon Thread</a> x 5 - Vendor Buy: 60s</p>
+        <p class="text-center">Crafting Cost: ${getGSCString(linenBracers)}</p>
+      </div>
+    </div>`).appendTo("#stepOneCardGroup");
+  $(`<div class="card">
+      <div class="card-header">
+        <a href="#" data-wowhead="item=154153"><img src="${ssBIcon}" alt="Shimmerscale Armguards">Shimmerscale Armguards</a>
+      </div>
+      <div class="card-body">
+        <p><a href="#" data-wowhead="item=${shimmerscale.id}"><img src="${shimmerscale.icon}" alt="Shimmerscale">Shimmerscale</a> x 6 - Average Price: ${getGSCString(shimmerscale.average)}</p>
+        <p><a href="#" data-wowhead="item=${bloodStainedBone.id}"><img src="${bloodStainedBone.icon}" alt="Blood-stained Bone">Blood-stained Bone</a> x 4 - Average Price: ${getGSCString(bloodStainedBone.average)}</p>
+        <p class="text-center">Crafting Cost: ${getGSCString(scaleBracers)}</p>
+      </div>
+    </div>`).appendTo("#stepOneCardGroup");
+    $(`<div class="card">
+        <div class="card-header">
+          <a href="#" data-wowhead="item=154145"><img src="${clBIcon}" alt="Coarse Leather Armguards">Coarse Leather Armguards</a>
+        </div>
+        <div class="card-body">
+          <p><a href="#" data-wowhead="item=${coarseLeather.id}"><img src="${coarseLeather.icon}" alt="Coarse Leather">Coarse Leather</a> x 6 - Average Price: ${getGSCString(coarseLeather.average)}</p>
+          <p><a href="#" data-wowhead="item=${bloodStainedBone.id}"><img src="${bloodStainedBone.icon}" alt="Blood-stained Bone">Blood-stained Bone</a> x 4 - Average Price: ${getGSCString(bloodStainedBone.average)}</p>
+          <p class="text-center">Crafting Cost: ${getGSCString(leatherBracers)}</p>
+        </div>
+      </div>`).appendTo("#stepOneCardGroup");
     $(`<div class="row justify-content-center">
       <div class="col-4">
-        <p><img src="${expIcon}" alt="Expulsom">Expulsom - Estimated Crafting Cost: ${getGSCString(expulsom)}</p>
+        <p><img src="${expIcon}" alt="Expulsom">Expulsom - Craft ${expItem} - Crafting Cost: ${getGSCString(expulsom)}</p>
       </div>
     </div>`).appendTo("#root");
 });
