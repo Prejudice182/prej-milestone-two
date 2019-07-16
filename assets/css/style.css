@@ -1,0 +1,16 @@
+.card img, .alert img {
+    width: 32px;
+    height: 32px;
+}
+
+.gold {
+    color: #ddb100;
+}
+
+.silver {
+    color: #e6e6e6;
+}
+
+.copper {
+    color: #c8602c;
+}
