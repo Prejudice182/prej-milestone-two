@@ -1,6 +1,9 @@
-.card img, .alert img {
+.card img {
     width: 32px;
     height: 32px;
+    border: 2px solid grey;
+    border-radius: 15%;
+    margin: 8px;
 }
 
 .gold {
@@ -13,4 +16,8 @@
 
 .copper {
     color: #c8602c;
+}
+
+a {
+    text-decoration: none !important;
 }

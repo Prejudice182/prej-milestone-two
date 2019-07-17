@@ -63,9 +63,9 @@ https://worldofwarcraft.com/en-gb/game/status
 */
 let baseImgDir = "./assets/img/";
 
-let names = ["coarseLeather", "tidesprayLinen", "deepSeaSatin", "shimmerscale", "mistscale", "bloodStainedBone", "calcifiedBone", "tempestHide", "nylonThread"];
-let ids = [152541, 152576, 152577, 153050, 153051, 154164, 154165, 154722, 159959];
-let icons = ["coarseleather.jpg", "tidespraylinen.jpg", "deepseasatin.jpg", "shimmerscale.jpg", "mistscale.jpg", "bloodstainedbone.jpg", "calcifiedbone.jpg", "tempesthide.jpg", "nylonthread.jpg"];
+let names = ["coarseLeather", "tidesprayLinen", "deepSeaSatin", "shimmerscale", "mistscale", "bloodStainedBone", "calcifiedBone", "tempestHide", "nylonThread", "gloomDust", "umbraShard", "veiledCrystal"];
+let ids = [152541, 152576, 152577, 153050, 153051, 154164, 154165, 154722, 159959, 152875, 152876, 152877];
+let icons = ["coarseleather.jpg", "tidespraylinen.jpg", "deepseasatin.jpg", "shimmerscale.jpg", "mistscale.jpg", "bloodstainedbone.jpg", "calcifiedbone.jpg", "tempesthide.jpg", "nylonthread.jpg", "gloomdust.jpg", "umbrashard.jpg", "veiledcrystal.jpg"];
 
 const items = ids.reduce((o, k, i) => ({
   ...o,
@@ -93,13 +93,19 @@ const getGSCString = value => {
   return `${gold}<span class="gold">g</span> ${silver}<span class="silver">s</span> ${copper}<span class="copper">c</span>`;
 }
 
-const arrSum = arr => arr.reduce((a, b) => a + b, 0);
+const arrAvg = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
+
+const arrMedian = arr => {
+  const mid = Math.floor(arr.length / 2),
+    nums = [...arr].sort((a, b) => a - b);
+  return arr.length % 2 !== 0 ? nums[mid] : (nums[mid - 1] + nums[mid]) / 2;
+};
 
 const getAveragePrice = () => {
   $.each(items, (i, v) => {
-    let tot = arrSum(v.prices);
-    let avg = tot / v.prices.length;
-    v.average = avg;
+    let avg = arrAvg(v.prices);
+    let med = arrMedian(v.prices);
+    v.average = (avg < med) ? avg : med;
   });
 }
 
@@ -145,15 +151,6 @@ $.getJSON("./assets/js/auctions.json", ahData => {
   let scaleBracers = (items.shimmerscale.average * 6) + (items.bloodStainedBone.average * 4);
   let leatherBracers = (items.coarseLeather.average * 6) + (items.bloodStainedBone.average * 4);
 
-  let expulsom = Math.min(linenBracers, scaleBracers, leatherBracers) / 0.15;
-  let expItem;
-  if (linenBracers < scaleBracers && linenBracers < leatherBracers)
-    expItem = "Tidespray Linen Bracers";
-  else if (scaleBracers < linenBracers && scaleBracers < leatherBracers)
-    expItem = "Shimmerscale Armguards";
-  else if (leatherBracers < linenBracers && leatherBracers < scaleBracers)
-    expItem = "Coarse Leather Armguards";
-
   $(`<div class="card-deck" id="stepOneCardDeck"></div>`).appendTo("#stepOneCol");
   $(`<div class="card">
       <div class="card-header">
@@ -185,23 +182,43 @@ $.getJSON("./assets/js/auctions.json", ahData => {
           <p class="text-center">Crafting Cost: ${getGSCString(leatherBracers)}</p>
         </div>
       </div>`).appendTo("#stepOneCardDeck");
-  $(`<div class="row justify-content-center py-3">
+
+  /* End of Step One */
+
+  /* Step Two Calculations and Display */
+
+  let expulsom = Math.min(linenBracers, scaleBracers, leatherBracers) / 0.15;
+  let expItem, expItemID, expItemIcon;
+  if (linenBracers < scaleBracers && linenBracers < leatherBracers) {
+    expItem = "Tidespray Linen Bracers";
+    expItemID = 154692;
+    expItemIcon = tsBIcon;
+  } else if (scaleBracers < linenBracers && scaleBracers < leatherBracers) {
+    expItem = "Shimmerscale Armguards";
+    expItemID = 154153;
+    expItemIcon = ssBIcon;
+  } else if (leatherBracers < linenBracers && leatherBracers < scaleBracers) {
+    expItem = "Coarse Leather Armguards";
+    expItemID = 154145;
+    expItemIcon = clBIcon;
+  }
+
+  $(`<div class="row justify-content-center">
       <div class="col-4">
         <div class="card">
           <div class="card-header">
             <a href="https://www.wowhead.com/item=152668" class="q3"><img src="${expIcon}" alt="Expulsom">Expulsom</a>
           </div>
           <div class="card-body">
-            <p>Craft and Scrap - ${expItem}</p>
-            <p>Cost @ 15% chance of Expulsom: ${getGSCString(expulsom)}</p>         
+            <p>Cost @ 15% chance of receiving Expulsom: ${getGSCString(expulsom)}</p>
           </div>
         </div>
       </div>
-    </div>`).insertAfter("#stepOneRow");
+    </div>`).appendTo("#stepTwoCol");
 
-  /* End of Step One */
+  /* End of Step Two */
 
-  /* Step Two Calculations and Display */
+  /* Step Three Calculations and Display */
 
   let honorSatin = (items.deepSeaSatin.average * 22) + (items.nylonThread.average * 8) + expulsom;
   let honorMail = (items.mistscale.average * 12) + (items.calcifiedBone.average * 8) + expulsom;
@@ -216,7 +233,7 @@ $.getJSON("./assets/js/auctions.json", ahData => {
   else if (honorLeather < honorSatin && honorLeather < honorMail)
     honorItem += "Leather Armguards";
 
-  $(`<div class="card-deck" id="stepTwoCardDeck"></div>`).appendTo("#stepTwoCol");
+  $(`<div class="card-deck" id="stepThreeCardDeck"></div>`).appendTo("#stepThreeCol");
   $(`<div class="card">
       <div class="card-header">
         <a href="https://www.wowhead.com/item=159916" class="q3"><img src="${hSBIcon}" alt="Honorable Combantant's Satin Bracers">Honorable Combantant's Satin Bracers</a>
@@ -227,8 +244,8 @@ $.getJSON("./assets/js/auctions.json", ahData => {
         <p><a href="https://www.wowhead.com/item=152668" class="q3"><img src="${expIcon}" alt="Expulsom">Expulsom</a> x 1 - Crafting Cost: ${getGSCString(expulsom)}</p>
         <p class="text-center">Crafting Cost: ${getGSCString(honorSatin)}</p>
       </div>
-    </div>`).appendTo("#stepTwoCardDeck");
-    $(`<div class="card">
+    </div>`).appendTo("#stepThreeCardDeck");
+  $(`<div class="card">
       <div class="card-header">
         <a href="https://www.wowhead.com/item=159888" class="q3"><img src="${hLBIcon}" alt="Honorable Combantant's Leather Armguards">Honorable Combantant's Leather Armguards</a>
       </div>
@@ -238,8 +255,8 @@ $.getJSON("./assets/js/auctions.json", ahData => {
         <p><a href="https://www.wowhead.com/item=152668" class="q3"><img src="${expIcon}" alt="Expulsom">Expulsom</a> x 1 - Crafting Cost: ${getGSCString(expulsom)}</p>
         <p class="text-center">Crafting Cost: ${getGSCString(honorLeather)}</p>
       </div>
-    </div>`).appendTo("#stepTwoCardDeck");
-    $(`<div class="card">
+    </div>`).appendTo("#stepThreeCardDeck");
+  $(`<div class="card">
       <div class="card-header">
         <a href="https://www.wowhead.com/item=159893" class="q3"><img src="${hMBIcon}" alt="Honorable Combantant's Mail Armguards">Honorable Combantant's Mail Armguards</a>
       </div>
@@ -249,6 +266,9 @@ $.getJSON("./assets/js/auctions.json", ahData => {
         <p><a href="https://www.wowhead.com/item=152668" class="q3"><img src="${expIcon}" alt="Expulsom">Expulsom</a> x 1 - Crafting Cost: ${getGSCString(expulsom)}</p>
         <p class="text-center">Crafting Cost: ${getGSCString(honorMail)}</p>
       </div>
-    </div>`).appendTo("#stepTwoCardDeck");
-    $(".card-header").addClass("text-center");
+    </div>`).appendTo("#stepThreeCardDeck");
+
+  /* End of Step Three */
+
+  $(".card-header").addClass("text-center");
 });
