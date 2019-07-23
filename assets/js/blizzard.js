@@ -153,7 +153,7 @@ $.getJSON("./assets/js/auctions.json", ahData => {
         <a href="https://www.wowhead.com/item=154692" class="q2"><img src="${tsBIcon}" alt="Tidespray Linen Bracers">Tidespray Linen Bracers</a>
       </div>
       <div class="card-body">
-        <p><a href="https://www.wowhead.com/item=${items.tidesprayLinen.id}" class="q1"><img src="${items.tidesprayLinen.icon}" alt="Tidespray Linen">Tidespray Linen</a> x 10 - Average Price: ${getGSCString(items.tidesprayLinen.average)}</p>
+        <div><a href="https://www.wowhead.com/item=${items.tidesprayLinen.id}" class="q1"><img src="${items.tidesprayLinen.icon}" alt="Tidespray Linen">Tidespray Linen</a> x 10 - Average Price: ${getGSCString(items.tidesprayLinen.average)}</div>
         <p><a href="https://www.wowhead.com/item=${items.nylonThread.id}" class="q1"><img src="${items.nylonThread.icon}" alt="Nylon Thread">Nylon Thread</a> x 5 - Vendor Buy: ${getGSCString(items.nylonThread.average)}</p>
         <p class="text-center">Crafting Cost: ${getGSCString(linenBracers)}</p>
       </div>
