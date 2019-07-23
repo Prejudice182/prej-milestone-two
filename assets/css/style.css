@@ -1,7 +1,7 @@
 .card img {
     width: 32px;
     height: 32px;
-    border: 2px solid grey;
+    border: 2px solid rgb(80, 80, 80);
     border-radius: 15%;
     margin: 8px;
 }
@@ -18,6 +18,22 @@
     color: #c8602c;
 }
 
-a {
-    text-decoration: none !important;
+a, a:hover {
+    text-decoration: none;
+}
+
+.q1, .q1:hover {
+    color: #fff;
+}
+
+.q2, .q2:hover {
+    color: #1eff00;
+}
+
+.q3, .q3:hover {
+    color: #0070dd;
+}
+
+.q4, .q4:hover {
+    color: #a335ee;
 }

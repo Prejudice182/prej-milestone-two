@@ -53,6 +53,21 @@ const getDumpURL = realm => {
   });
 };
 
+const getItemIcon = itemID => {
+  return getToken().then(token => {
+    return window.fetch(
+        `https://eu.api.blizzard.com/data/wow/media/item/${itemID}?namespace=static-eu&locale=en_GB`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }).then(response => response.json())
+      .then(response => {
+        console.log(response.assets[0].value);
+      });
+  });
+}
+
 /*
 End of retrieval code. You can test this in your console if you would like to see it running.
 Do this by running the command: 
@@ -109,29 +124,6 @@ const getAveragePrice = () => {
   });
 }
 
-const getItemIcon = itemID => {
-  return getToken().then(token => {
-    return window.fetch(
-        `https://eu.api.blizzard.com/data/wow/media/item/${itemID}?namespace=static-eu&locale=en_GB`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }).then(response => response.json())
-      .then(response => {
-        console.log(response.assets[0].value);
-      });
-  });
-}
-
-let tsBIcon = baseImgDir + "tsbracers.jpg";
-let ssBIcon = baseImgDir + "ssbracers.jpg";
-let clBIcon = baseImgDir + "clbracers.jpg";
-let hSBIcon = baseImgDir + "honorSatin.jpg";
-let hMBIcon = baseImgDir + "honorMail.jpg";
-let hLBIcon = baseImgDir + "honorLeather.jpg";
-let expIcon = baseImgDir + "expulsom.jpg";
-
 $.getJSON("./assets/js/auctions.json", ahData => {
   let auctions = ahData.auctions;
   getItemsData(auctions);
@@ -150,6 +142,10 @@ $.getJSON("./assets/js/auctions.json", ahData => {
   let linenBracers = (items.tidesprayLinen.average * 10) + (items.nylonThread.average * 5);
   let scaleBracers = (items.shimmerscale.average * 6) + (items.bloodStainedBone.average * 4);
   let leatherBracers = (items.coarseLeather.average * 6) + (items.bloodStainedBone.average * 4);
+
+  let tsBIcon = baseImgDir + "tsbracers.jpg";
+  let ssBIcon = baseImgDir + "ssbracers.jpg";
+  let clBIcon = baseImgDir + "clbracers.jpg";
 
   $(`<div class="card-deck" id="stepOneCardDeck"></div>`).appendTo("#stepOneCol");
   $(`<div class="card">
@@ -188,7 +184,9 @@ $.getJSON("./assets/js/auctions.json", ahData => {
   /* Step Two Calculations and Display */
 
   let expulsom = Math.min(linenBracers, scaleBracers, leatherBracers) / 0.15;
+  let expIcon = baseImgDir + "expulsom.jpg";
   let expItem, expItemID, expItemIcon;
+  
   if (linenBracers < scaleBracers && linenBracers < leatherBracers) {
     expItem = "Tidespray Linen Bracers";
     expItemID = 154692;
@@ -224,6 +222,10 @@ $.getJSON("./assets/js/auctions.json", ahData => {
   let honorMail = (items.mistscale.average * 12) + (items.calcifiedBone.average * 8) + expulsom;
   let honorLeather = (items.tempestHide.average * 12) + (items.calcifiedBone.average * 8) + expulsom;
 
+  let hSBIcon = baseImgDir + "honorSatin.jpg";
+  let hMBIcon = baseImgDir + "honorMail.jpg";
+  let hLBIcon = baseImgDir + "honorLeather.jpg";
+
   let honorItemPrice = Math.min(honorSatin, honorMail, honorLeather);
   let honorItem = "Honorable Combatant's ";
   if (honorSatin < honorMail && honorSatin < honorLeather)
@@ -240,7 +242,7 @@ $.getJSON("./assets/js/auctions.json", ahData => {
       </div>
       <div class="card-body">
         <p><a href="https://www.wowhead.com/item=${items.deepSeaSatin.id}" class="q2"><img src="${items.deepSeaSatin.icon}" alt="Deep Sea Satin">Deep Sea Satin</a> x 22 - Average Price: ${getGSCString(items.deepSeaSatin.average)}</p>
-        <p><a href="https://www.wowhead.com/item=${items.nylonThread.id}" class="q1"><img src="${items.nylonThread.icon}" alt="Nylon Thread">Nylon Thread</a> x 8 - Vendor Buy: ${getGSCString(items.nylonThread.average)}</p>
+        <p><a href="https://www.wowhead.com/item=${items.nylonThread.id}" class="q1"><img src="${items.nylonThread.icon}" alt="Nylon Thread">Nylon Thread</a> x 8 - Average Price: ${getGSCString(items.nylonThread.average)}</p>
         <p><a href="https://www.wowhead.com/item=152668" class="q3"><img src="${expIcon}" alt="Expulsom">Expulsom</a> x 1 - Crafting Cost: ${getGSCString(expulsom)}</p>
         <p class="text-center">Crafting Cost: ${getGSCString(honorSatin)}</p>
       </div>
@@ -251,7 +253,7 @@ $.getJSON("./assets/js/auctions.json", ahData => {
       </div>
       <div class="card-body">
         <p><a href="https://www.wowhead.com/item=${items.tempestHide.id}" class="q2"><img src="${items.tempestHide.icon}" alt="Tempest Hide">Tempest Hide</a> x 12 - Average Price: ${getGSCString(items.tempestHide.average)}</p>
-        <p><a href="https://www.wowhead.com/item=${items.calcifiedBone.id}" class="q2"><img src="${items.calcifiedBone.icon}" alt="Calcified Bone">Calcified Bone</a> x 8 - Vendor Buy: ${getGSCString(items.calcifiedBone.average)}</p>
+        <p><a href="https://www.wowhead.com/item=${items.calcifiedBone.id}" class="q2"><img src="${items.calcifiedBone.icon}" alt="Calcified Bone">Calcified Bone</a> x 8 - Average Price: ${getGSCString(items.calcifiedBone.average)}</p>
         <p><a href="https://www.wowhead.com/item=152668" class="q3"><img src="${expIcon}" alt="Expulsom">Expulsom</a> x 1 - Crafting Cost: ${getGSCString(expulsom)}</p>
         <p class="text-center">Crafting Cost: ${getGSCString(honorLeather)}</p>
       </div>
@@ -262,13 +264,41 @@ $.getJSON("./assets/js/auctions.json", ahData => {
       </div>
       <div class="card-body">
         <p><a href="https://www.wowhead.com/item=${items.mistscale.id}" class="q2"><img src="${items.mistscale.icon}" alt="Mistscale">Mistscale</a> x 12 - Average Price: ${getGSCString(items.mistscale.average)}</p>
-        <p><a href="https://www.wowhead.com/item=${items.calcifiedBone.id}" class="q2"><img src="${items.calcifiedBone.icon}" alt="Calcified Bone">Calcified Bone</a> x 8 - Vendor Buy: ${getGSCString(items.calcifiedBone.average)}</p>
+        <p><a href="https://www.wowhead.com/item=${items.calcifiedBone.id}" class="q2"><img src="${items.calcifiedBone.icon}" alt="Calcified Bone">Calcified Bone</a> x 8 - Average Price: ${getGSCString(items.calcifiedBone.average)}</p>
         <p><a href="https://www.wowhead.com/item=152668" class="q3"><img src="${expIcon}" alt="Expulsom">Expulsom</a> x 1 - Crafting Cost: ${getGSCString(expulsom)}</p>
         <p class="text-center">Crafting Cost: ${getGSCString(honorMail)}</p>
       </div>
     </div>`).appendTo("#stepThreeCardDeck");
 
   /* End of Step Three */
+
+  /* Step Four Calculations and Display */
+
+  $(`<div class="card-deck" id="stepFourCardDeck"></div>`).appendTo("#stepFourCol");
+  $(`<div class="card">
+      <div class="card-header">
+        <a href="https://www.wowhead.com/item=${items.gloomDust.id}" class="q1"><img src="${items.gloomDust.icon}" alt="Gloom Dust">Gloom Dust</a>
+      </div>
+      <div class="card-body">
+        <p class="text-center">Average Price: ${getGSCString(items.gloomDust.average)}</p>
+      </div>
+    </div>`).appendTo("#stepFourCardDeck");
+  $(`<div class="card">
+      <div class="card-header">
+        <a href="https://www.wowhead.com/item=${items.umbraShard.id}" class="q3"><img src="${items.umbraShard.icon}" alt="Umbra Shard">Umbra Shard</a>
+      </div>
+      <div class="card-body">
+        <p class="text-center">Average Price: ${getGSCString(items.umbraShard.average)}</p>
+      </div>
+    </div>`).appendTo("#stepFourCardDeck");
+  $(`<div class="card">
+      <div class="card-header">
+        <a href="https://www.wowhead.com/item=${items.veiledCrystal.id}" class="q4"><img src="${items.veiledCrystal.icon}" alt="Veiled Crystal">Veiled Crystal</a>
+      </div>
+      <div class="card-body">
+        <p class="text-center">Average Price: ${getGSCString(items.veiledCrystal.average)}</p>
+      </div>
+    </div>`).appendTo("#stepFourCardDeck");
 
   $(".card-header").addClass("text-center");
 });
