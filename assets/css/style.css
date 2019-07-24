@@ -15,23 +15,23 @@ a:hover {
     text-decoration: none;
 }
 
-.q1,
-.q1:hover {
+.common,
+.common:hover {
     color: rgb(156, 37, 37);
 }
 
-.q2,
-.q2:hover {
+.uncommon,
+.uncommon:hover {
     color: #1eff00;
 }
 
-.q3,
-.q3:hover {
+.rare,
+.rare:hover {
     color: #0070dd;
 }
 
-.q4,
-.q4:hover {
+.epic,
+.epic:hover {
     color: #a335ee;
 }
 
