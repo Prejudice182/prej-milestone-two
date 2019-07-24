@@ -1,3 +1,20 @@
+body {
+    background-color: #242424;
+    color: #fff;
+}
+
+.card, .card-header, .card-footer {
+    background-color: #070c21 !important;
+}
+
+.card-header, .card-footer {
+    border: 0;
+}
+
+.card {
+    border: 1px solid #fff;
+}
+
 .gold {
     color: #ddb100;
 }
@@ -17,7 +34,7 @@ a:hover {
 
 .common,
 .common:hover {
-    color: rgb(156, 37, 37);
+    color: #fff;
 }
 
 .uncommon,
@@ -38,7 +55,7 @@ a:hover {
 .card img {
     width: 32px;
     height: 32px;
-    border: 3px solid #505050;
+    border: 1px solid #fff;
     border-radius: 15%;
     margin-right: 10px;
 }
