@@ -145,16 +145,19 @@ const getAveragePrice = () => {
 
 const printItemCard = (arr, element) => {
   let craftedItem = arr.shift();
-  $(`<div class="card">
+  $(`
+  <div class="col-xl-4 py-3">
+    <div class="card">
       <div class="card-header">
-        <a href="https://www.wowhead.com/item=${craftedItem.id}" class="${craftedItem.quality}"><img src="${craftedItem.icon}" alt="${craftedItem.alt}" class="img-header"><span class="float-right">${craftedItem.alt}</span></a>
+        <a href="https://www.wowhead.com/item=${craftedItem.id}" class="${craftedItem.quality}"><img src="${craftedItem.icon}" alt="${craftedItem.alt}" class="img-fluid img-header"><span class="float-right">${craftedItem.alt}</span></a>
       </div>
       <div class="card-body" id="${craftedItem.id}">
       </div>
       <div class="card-footer text-center">
         Crafting Cost: ${getGSCString(craftedItem.average)}
       </div>
-    </div>`).appendTo($(element));
+    </div>
+  </div>`).appendTo($(element));
   for (let i = 0; i < arr.length - 1; i += 2) {
     $(`<div class="row align-items-baseline py-2">
         <div class="col-6">
@@ -168,13 +171,15 @@ const printItemCard = (arr, element) => {
 }
 
 const printMaterialCard = (mat, element) => {
-  var text = (mat.alt === "Expulsom") ? "Cost @ 15% chance of receiving Expulsom" : "Average Price";
-  $(`<div class="card">
-    <div class="card-header">
-      <a href="https://www.wowhead.com/item=${mat.id}" class="${mat.quality}"><img src="${mat.icon}" alt="${mat.alt}" class="img-header"><span class="float-right">${mat.alt}</span></a>
-    </div>
-    <div class="card-body text-center">
-      ${text} : ${getGSCString(mat.average)}
+  $(`
+  <div class="col-xl-4 py-3">
+    <div class="card">
+      <div class="card-header">
+        <a href="https://www.wowhead.com/item=${mat.id}" class="${mat.quality}"><img src="${mat.icon}" alt="${mat.alt}" class="img-header"><span class="float-right">${mat.alt}</span></a>
+      </div>
+      <div class="card-body text-center">
+        Average Price: ${getGSCString(mat.average)}
+      </div>
     </div>
   </div>`).appendTo($(element));
 }
@@ -206,7 +211,7 @@ $.getJSON("./assets/js/auctions.json", ahData => {
 
   let stepOneItemsArr = [linenBracersArr, scaleBracersArr, leatherBracersArr];
 
-  $.each(stepOneItemsArr, (i, v) => printItemCard(v, "#stepOneCardDeck"));
+  $.each(stepOneItemsArr, (i, v) => printItemCard(v, "#stepOneInnerRow"));
 
   /* End of Step One */
 
@@ -215,7 +220,14 @@ $.getJSON("./assets/js/auctions.json", ahData => {
   // Set Expulsom average to the cheapest bracer crafting cost, divided by 0.15 as per chance of receiving one per scrap
   items.expulsom.average = Math.min(items.tidesprayLinenBracers.average, items.shimmerscaleArmguards.average, items.coarseLeatherArmguards.average) / 0.15;
 
-  printMaterialCard(items.expulsom, "#stepTwoCol");
+  $(`<div class="card">
+    <div class="card-header">
+      <a href="https://www.wowhead.com/item=${items.expulsom.id}" class="${items.expulsom.quality}"><img src="${items.expulsom.icon}" alt="${items.expulsom.alt}" class="img-header"><span class="float-right">${items.expulsom.alt}</span></a>
+    </div>
+    <div class="card-body text-center">
+      Cost @ 15% chance of receiving Expulsom: ${getGSCString(items.expulsom.average)}
+    </div>
+  </div>`).appendTo("#stepTwoCol");
 
   /* End of Step Two */
 
@@ -231,14 +243,14 @@ $.getJSON("./assets/js/auctions.json", ahData => {
 
   let stepThreeItemsArr = [honorSatinArr, honorLeatherArr, honorMailArr];
 
-  $.each(stepThreeItemsArr, (i, v) => printItemCard(v, "#stepThreeCardDeck"));
+  $.each(stepThreeItemsArr, (i, v) => printItemCard(v, "#stepThreeInnerRow"));
 
   /* End of Step Three */
 
   /* Step Four Calculations and Display */
   let stepFourItems = [items.gloomDust, items.umbraShard, items.veiledCrystal];
 
-  $.each(stepFourItems, (i, v) => printMaterialCard(v, "#stepFourCardDeck"));
+  $.each(stepFourItems, (i, v) => printMaterialCard(v, "#stepFourInnerRow"));
   
   $(".col-6:odd").addClass("text-right");
 });
