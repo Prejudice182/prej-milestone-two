@@ -228,6 +228,8 @@ $.getJSON("./assets/js/auctions.json", ahData => {
         </div>
       </div>`).appendTo("#stepOneCardDeck");
 
+      $(".col-6:odd").addClass("text-right");
+
   /* End of Step One */
 
   /* Step Two Calculations and Display */
