@@ -35,7 +35,7 @@ const getToken = () => {
   }
 };
 
-const getDumpURL = realm => {
+const getDumpURL = (realm = "ragnaros") => {
   return getToken().then(token => {
     return window
       .fetch(
@@ -150,32 +150,81 @@ $.getJSON("./assets/js/auctions.json", ahData => {
   $(`<div class="card-deck" id="stepOneCardDeck"></div>`).appendTo("#stepOneCol");
   $(`<div class="card">
       <div class="card-header">
-        <a href="https://www.wowhead.com/item=154692" class="q2"><img src="${tsBIcon}" alt="Tidespray Linen Bracers">Tidespray Linen Bracers</a>
+        <a href="https://www.wowhead.com/item=154692" class="q2"><img src="${tsBIcon}" alt="Tidespray Linen Bracers" class="img-header"><span class="float-right">Tidespray Linen Bracers</span></a>
       </div>
       <div class="card-body">
-        <div><a href="https://www.wowhead.com/item=${items.tidesprayLinen.id}" class="q1"><img src="${items.tidesprayLinen.icon}" alt="Tidespray Linen">Tidespray Linen</a> x 10 - Average Price: ${getGSCString(items.tidesprayLinen.average)}</div>
-        <p><a href="https://www.wowhead.com/item=${items.nylonThread.id}" class="q1"><img src="${items.nylonThread.icon}" alt="Nylon Thread">Nylon Thread</a> x 5 - Vendor Buy: ${getGSCString(items.nylonThread.average)}</p>
-        <p class="text-center">Crafting Cost: ${getGSCString(linenBracers)}</p>
+        <div class="row align-items-baseline py-2">
+          <div class="col-6">
+            <a href="https://www.wowhead.com/item=${items.tidesprayLinen.id}" class="q1"><img src="${items.tidesprayLinen.icon}" alt="Tidespray Linen">Tidespray Linen</a> x 10
+          </div>
+          <div class="col-6">
+            Average Price: ${getGSCString(items.tidesprayLinen.average)}
+          </div>
+        </div>
+        <div class="row align-items-baseline py-2">
+          <div class="col-6">
+            <a href="https://www.wowhead.com/item=${items.nylonThread.id}" class="q1"><img src="${items.nylonThread.icon}" alt="Nylon Thread">Nylon Thread</a> x 5
+          </div>
+          <div class="col-6">
+            Vendor Buy: ${getGSCString(items.nylonThread.average)}
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-center">
+        Crafting Cost: ${getGSCString(linenBracers)}
       </div>
     </div>`).appendTo("#stepOneCardDeck");
+
   $(`<div class="card">
       <div class="card-header">
-        <a href="https://www.wowhead.com/item=154153" class="q2"><img src="${ssBIcon}" alt="Shimmerscale Armguards">Shimmerscale Armguards</a>
+        <a href="https://www.wowhead.com/item=154153" class="q2"><img src="${ssBIcon}" alt="Shimmerscale Armguards" class="img-header"><span class="float-right">Shimmerscale Armguards</span></a>
       </div>
       <div class="card-body">
-        <p><a href="https://www.wowhead.com/item=${items.shimmerscale.id}" class="q1"><img src="${items.shimmerscale.icon}" alt="Shimmerscale">Shimmerscale</a> x 6 - Average Price: ${getGSCString(items.shimmerscale.average)}</p>
-        <p><a href="https://www.wowhead.com/item=${items.bloodStainedBone.id}" class="q1"><img src="${items.bloodStainedBone.icon}" alt="Blood-stained Bone">Blood-stained Bone</a> x 4 - Average Price: ${getGSCString(items.bloodStainedBone.average)}</p>
-        <p class="text-center">Crafting Cost: ${getGSCString(scaleBracers)}</p>
+        <div class="row align-items-baseline py-2">
+          <div class="col-6">
+            <a href="https://www.wowhead.com/item=${items.shimmerscale.id}" class="q1"><img src="${items.shimmerscale.icon}" alt="Shimmerscale">Shimmerscale</a> x 6
+          </div>
+          <div class="col-6">
+            Average Price: ${getGSCString(items.shimmerscale.average)}
+          </div>
+        </div>
+        <div class="row align-items-baseline py-2">
+          <div class="col-6">
+            <a href="https://www.wowhead.com/item=${items.bloodStainedBone.id}" class="q1"><img src="${items.bloodStainedBone.icon}" alt="Blood-stained Bone">Blood-stained Bone</a> x 4
+          </div>
+          <div class="col-6">
+            Average Price: ${getGSCString(items.bloodStainedBone.average)}
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-center">
+          Crafting Cost: ${getGSCString(scaleBracers)}
       </div>
     </div>`).appendTo("#stepOneCardDeck");
   $(`<div class="card">
         <div class="card-header">
-          <a href="https://www.wowhead.com/item=154145" class="q2"><img src="${clBIcon}" alt="Coarse Leather Armguards">Coarse Leather Armguards</a>
+          <a href="https://www.wowhead.com/item=154145" class="q2"><img src="${clBIcon}" alt="Coarse Leather Armguards" class="img-header"><span class="float-right">Coarse Leather Armguards</span></a>
         </div>
         <div class="card-body">
-          <p><a href="https://www.wowhead.com/item=${items.coarseLeather.id}" class="q1"><img src="${items.coarseLeather.icon}" alt="Coarse Leather">Coarse Leather</a> x 6 - Average Price: ${getGSCString(items.coarseLeather.average)}</p>
-          <p><a href="https://www.wowhead.com/item=${items.bloodStainedBone.id}" class="q1"><img src="${items.bloodStainedBone.icon}" alt="Blood-stained Bone">Blood-stained Bone</a> x 4 - Average Price: ${getGSCString(items.bloodStainedBone.average)}</p>
-          <p class="text-center">Crafting Cost: ${getGSCString(leatherBracers)}</p>
+          <div class="row align-items-baseline py-2">
+            <div class="col-6">
+              <a href="https://www.wowhead.com/item=${items.coarseLeather.id}" class="q1"><img src="${items.coarseLeather.icon}" alt="Coarse Leather">Coarse Leather</a> x 6
+            </div>
+            <div class="col-6">
+              Average Price: ${getGSCString(items.coarseLeather.average)}
+            </div>
+          </div>
+          <div class="row align-items-baseline py-2">
+            <div class="col-6">
+              <a href="https://www.wowhead.com/item=${items.bloodStainedBone.id}" class="q1"><img src="${items.bloodStainedBone.icon}" alt="Blood-stained Bone">Blood-stained Bone</a> x 4
+            </div>
+            <div class="col-6">
+              Average Price: ${getGSCString(items.bloodStainedBone.average)}
+            </div>
+          </div>
+        </div>
+        <div class="card-footer text-center">
+          Crafting Cost: ${getGSCString(leatherBracers)}
         </div>
       </div>`).appendTo("#stepOneCardDeck");
 
@@ -299,6 +348,4 @@ $.getJSON("./assets/js/auctions.json", ahData => {
         <p class="text-center">Average Price: ${getGSCString(items.veiledCrystal.average)}</p>
       </div>
     </div>`).appendTo("#stepFourCardDeck");
-
-  $(".card-header").addClass("text-center");
 });

@@ -1,15 +1,3 @@
-.card {
-    background-color: #8794ad;
-}
-
-.card img {
-    width: 32px;
-    height: 32px;
-    border: 2px solid rgb(80, 80, 80);
-    border-radius: 15%;
-    margin: 8px;
-}
-
 .gold {
     color: #ddb100;
 }
@@ -22,22 +10,41 @@
     color: #c8602c;
 }
 
-a, a:hover {
+a,
+a:hover {
     text-decoration: none;
 }
 
-.q1, .q1:hover {
-    color: #fff;
+.q1,
+.q1:hover {
+    color: rgb(156, 37, 37);
 }
 
-.q2, .q2:hover {
+.q2,
+.q2:hover {
     color: #1eff00;
 }
 
-.q3, .q3:hover {
+.q3,
+.q3:hover {
     color: #0070dd;
 }
 
-.q4, .q4:hover {
+.q4,
+.q4:hover {
     color: #a335ee;
+}
+
+.card img {
+    width: 32px;
+    height: 32px;
+    border: 3px solid #505050;
+    border-radius: 15%;
+    margin-right: 10px;
+}
+
+img.img-header {
+    width: 56px;
+    height: 56px;
+    margin: -25px 0 0 -10px;
 }
