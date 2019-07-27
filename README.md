@@ -48,6 +48,8 @@ I mocked up an early desktop-first layout using Balsamiq, which can be found [he
     - Used to give access to a multitude of helper classes for CSS
 - [jQuery](https://jquery.com/)
     - Used for DOM manipulation
+- [Blizzard API](https://develop.battle.net/)
+    - Used to retrieve auction house data, item info
 
 ## Testing
 
@@ -62,6 +64,8 @@ As I now had the auctions data, I now had to decided how to look through it for 
 I then set about displaying the data. I chose Bootstrap cards for the layout, and then broke each item down into its respective materials and amounts. 
 
 ## Deployment
+
+This site was coded using Visual Studio Code. It was made initially on Cloud 9, but after Amazon's acquisition and subsequent change to AWS Cloud 9, development is not as easy as it used to be. Code was tested using the Live Server extension of VS Code.
 
 This site is hosted on Github Pages, deployed from the master branch. There are no differences between the development and deployed version.
 
@@ -83,6 +87,7 @@ To clone this repository to run locally, you can do the following:
 
 ### Content
 
+- All item names and icons are property of Blizzard Entertainment, from their game, World of Warcraft
 - All other content was written by myself
 
 ### Media
