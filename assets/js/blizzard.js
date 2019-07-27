@@ -219,7 +219,8 @@ $.getJSON("./assets/js/auctions.json", ahData => {
 
   // Set Expulsom average to the cheapest bracer crafting cost, divided by 0.15 as per chance of receiving one per scrap
   items.expulsom.average = Math.min(items.tidesprayLinenBracers.average, items.shimmerscaleArmguards.average, items.coarseLeatherArmguards.average) / 0.15;
-
+  
+  // Special case for expulsom being the only item in a row
   $(`<div class="card">
     <div class="card-header">
       <a href="https://www.wowhead.com/item=${items.expulsom.id}" class="${items.expulsom.quality}"><img src="${items.expulsom.icon}" alt="${items.expulsom.alt}" class="img-header"><span class="float-right">${items.expulsom.alt}</span></a>
@@ -252,5 +253,8 @@ $.getJSON("./assets/js/auctions.json", ahData => {
 
   $.each(stepFourItems, (i, v) => printMaterialCard(v, "#stepFourInnerRow"));
   
+  /* End of Step Four */
+
+  // Move the price columns to the right
   $(".col-6:odd").addClass("text-right");
 });
