@@ -6,7 +6,9 @@ I made this page as my submission for my second milestone project for Code Insti
 
 The "Bracer Shuffle" is a means of making gold in the in game economy of World of Warcraft. The basic idea is to take cheap, readily available materials and craft them into bracers, a piece of armor in the game. This piece can then be broken down via a mechanic known as scrapping. Doing so results in part of the materials used in crafting being refunded, with a small chance of an item called "Expulsom" also being awarded.
 
-"Expulsom" is needed for higher end crafting, and is not tradable between users. It can be obtained through scrapping, world quests, or a daily transmute for players with the "Alchemy" profession.
+"Expulsom" is needed for higher end crafting, and is not tradable between users. It can be obtained through scrapping, world quests, or a daily transmute for players with the "Alchemy" profession. It is used to craft a different version of bracers, which result in items of epic quality. These items are then broken down by players with the "Enchanting" profession by a mechanic known as "Disenchanting". 
+
+Enchanters can complete a quest line and craft an item known as a "Tool of the Trade". This increase materials returned when disenchanting. It is because of this that allows the shuffle to be more profitable than it was before the introduction of this item.
 
 A live version can be found on [Github Pages](https://prejudice182.github.io/prej-milestone-two/).
 
