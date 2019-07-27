@@ -149,7 +149,7 @@ const printItemCard = (arr, element) => {
   <div class="col-xl-4 py-3">
     <div class="card">
       <div class="card-header">
-        <a href="https://www.wowhead.com/item=${craftedItem.id}" class="${craftedItem.quality}"><img src="${craftedItem.icon}" alt="${craftedItem.alt}" class="img-fluid img-header"><span class="float-right">${craftedItem.alt}</span></a>
+        <a href="https://www.wowhead.com/item=${craftedItem.id}" class="${craftedItem.quality}" target="blank" rel="noopener"><img src="${craftedItem.icon}" alt="${craftedItem.alt}" class="img-fluid img-header"><span class="float-right">${craftedItem.alt}</span></a>
       </div>
       <div class="card-body" id="${craftedItem.id}">
       </div>
@@ -161,7 +161,7 @@ const printItemCard = (arr, element) => {
   for (let i = 0; i < arr.length - 1; i += 2) {
     $(`<div class="row align-items-baseline py-2">
         <div class="col-6">
-          <a href="https://www.wowhead.com/item=${arr[i].id}" class="${arr[i].quality}"><img src="${arr[i].icon}" alt="${arr[i].alt}">${arr[i].alt}</a> x ${arr[i+1]}
+          <a href="https://www.wowhead.com/item=${arr[i].id}" class="${arr[i].quality}" target="blank" rel="noopener"><img src="${arr[i].icon}" alt="${arr[i].alt}">${arr[i].alt}</a> x ${arr[i+1]}
         </div>
         <div class="col-6">
           Average Price: ${getGSCString(arr[i].average)}
@@ -223,7 +223,7 @@ $.getJSON("./assets/js/auctions.json", ahData => {
   // Special case for expulsom being the only item in a row
   $(`<div class="card">
     <div class="card-header">
-      <a href="https://www.wowhead.com/item=${items.expulsom.id}" class="${items.expulsom.quality}"><img src="${items.expulsom.icon}" alt="${items.expulsom.alt}" class="img-header"><span class="float-right">${items.expulsom.alt}</span></a>
+      <a href="https://www.wowhead.com/item=${items.expulsom.id}" class="${items.expulsom.quality}" target="blank" rel="noopener"><img src="${items.expulsom.icon}" alt="${items.expulsom.alt}" class="img-header"><span class="float-right">${items.expulsom.alt}</span></a>
     </div>
     <div class="card-body text-center">
       Cost @ 15% chance of receiving Expulsom: ${getGSCString(items.expulsom.average)}

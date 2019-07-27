@@ -21,7 +21,7 @@ When I was laying out this project, I wanted to make it as simple as possible, s
 - As a user, I want to know if the materials returned at the end of the shuffle are profitable.
 
 
-I mocked up an early desktop-first layout using Balsamiq, which can be found [here](https://github.com/Prejudice182/prej-milestone-one/assets/mockups/mockup-1.png).
+I mocked up an early desktop-first layout using Balsamiq, which can be found [here](https://github.com/Prejudice182/prej-milestone-two/blob/master/assets/mockups/mockup-1.png).
 
 ## Features
 
@@ -48,6 +48,16 @@ I mocked up an early desktop-first layout using Balsamiq, which can be found [he
     - Used for DOM manipulation
 
 ## Testing
+
+The first part getting my project underway was getting authorization set up. Blizzard used OAuth to secure their APIs, so I needed to set up a client on [their site](https://develop.battle.net/) to get the requisite credentials. As this is a frontend only application, it is not a great idea to expose API keys in the code served to users, but this is only for educational purposes. The API only offers read permissions anyway, no data can be wrote anywhere with the API.
+
+Blizzard offer two different flows for the API, client credentials or authorization code. The authorization code flow is used to access a player's data on their behalf, which we didn't need to use, so the choice was made to use the client credentials flow. I started coding the request, using the Fetch API. Once I received a token, I then started coding a call to another function to test if it was valid. I called the Auction API and retrieved the URL for an Auction House JSON dump, and the last modified date of it. This indicated my call to get a token was working and my API calls were successful.
+
+I proceeded to try write another function to get the data from the JSON file provided by Blizzard, but was met with an error regarding cross origin resource sharing or CORS. Blizzard don't set CORS headers on the file, therefore it can't be viewed by client-side Javascript, in an effort to limit users exposing their keys client side. I had to settle for getting the link and saving the JSON to my project manually. I hope in the future to use Node.js or some other backend service to obtain the file, and update this project.
+
+As I now had the auctions data, I now had to decided how to look through it for the items I was interested in. I created objects for each item I needed prices for, and looped through the data checking for matching item IDs. Once this was sorted, I needed to average out the prices, but sometimes players can skew this data by putting items on the Auction House for extortionate amounts. I added a median function as well, and choose the cheapest value between the two.
+
+I then set about displaying the data. I chose Bootstrap cards for the layout, and then broke each item down into its respective materials and amounts. 
 
 ## Deployment
 
