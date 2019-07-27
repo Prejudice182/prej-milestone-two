@@ -23,7 +23,8 @@ When I was laying out this project, I wanted to make it as simple as possible, s
 - As a user, I want to know if the materials returned at the end of the shuffle are profitable.
 
 
-I mocked up an early desktop-first layout using Balsamiq, which can be found [here](https://github.com/Prejudice182/prej-milestone-two/blob/master/assets/mockups/mockup-1.png).
+I mocked up an early desktop-first layout using Balsamiq
+![mockup](./assets/mockups/mockup-1.png)
 
 ## Features
 

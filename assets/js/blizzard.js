@@ -99,6 +99,7 @@ let icons = ["coarseleather.jpg", "tidespraylinen.jpg", "deepseasatin.jpg", "shi
 let alts = ["Coarse Leather", "Tidespray Linen", "Deep Sea Satin", "Shimmerscale", "Mistscale", "Blood-Stained Bone", "Calcified Bone", "Tempest Hide", "Nylon Thread", "Gloom Dust", "Umbra Shard", "Veiled Crystal", "Tidespray Linen Bracers", "Shimmerscale Armguards", "Coarse Leather Armguards", "Expulsom", "Honorable Combatant's Satin Bracers", "Honorable Combatant's Leather Armguards", "Honorable Combatant's Mail Armguards"];
 let qualities = ["common", "common", "uncommon", "common","uncommon","common","uncommon","uncommon","common","common","rare","epic","uncommon","uncommon","uncommon","rare","rare","rare","rare"];
 
+// Combine above arrays into objects
 const items = ids.reduce((o, k, i) => ({
   ...o,
   [k]: {
@@ -112,6 +113,7 @@ const items = ids.reduce((o, k, i) => ({
   }
 }), {});
 
+// Loop through auctions, check if ID matches one in items array
 const getItemsData = auctions => {
   $.each(auctions, (i, v) => {
     let pricePerItem = v.buyout / v.quantity;
@@ -120,6 +122,7 @@ const getItemsData = auctions => {
   });
 }
 
+// Convert number in readable string of gold, silver and copper
 const getGSCString = value => {
   let gold = Math.floor(value / 10000);
   let silver = Math.floor((value % 10000) / 100);
@@ -127,14 +130,17 @@ const getGSCString = value => {
   return `${gold}<span class="gold">g</span> ${silver}<span class="silver">s</span> ${copper}<span class="copper">c</span>`;
 }
 
+// Get average value of an array (Credit: https://codeburst.io/javascript-arrays-finding-the-minimum-maximum-sum-average-values-f02f1b0ce332)
 const arrAvg = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
 
+// Get median value of an array (Credit: https://www.w3resource.com/javascript-exercises/fundamental/javascript-fundamental-exercise-88.php)
 const arrMedian = arr => {
   const mid = Math.floor(arr.length / 2),
     nums = [...arr].sort((a, b) => a - b);
   return arr.length % 2 !== 0 ? nums[mid] : (nums[mid - 1] + nums[mid]) / 2;
 };
 
+// Get both average and median, set value to lowest
 const getAveragePrice = () => {
   $.each(items, (i, v) => {
     let avg = arrAvg(v.prices);
@@ -143,6 +149,7 @@ const getAveragePrice = () => {
   });
 }
 
+// Takes an array of items, and prints their information to the page using jQuery
 const printItemCard = (arr, element) => {
   let craftedItem = arr.shift();
   $(`
@@ -170,6 +177,7 @@ const printItemCard = (arr, element) => {
   }
 }
 
+// Takes a single item and prints a card with its information using jQuery
 const printMaterialCard = (mat, element) => {
   $(`
   <div class="col-xl-4 py-3">
@@ -205,13 +213,22 @@ $.getJSON("./assets/js/auctions.json", ahData => {
   let scaleBracers = items.shimmerscaleArmguards.average = (items.shimmerscale.average * 6) + (items.bloodStainedBone.average * 4);
   let leatherBracers = items.coarseLeatherArmguards.average = (items.coarseLeather.average * 6) + (items.bloodStainedBone.average * 4);
 
+  items.tidesprayLinenBracers.materials = [items.tidesprayLinen, items.nylonThread];
+  items.tidesprayLinenBracers.quantities = [10, 5];
+  
+  items.shimmerscaleArmguards.materials = [items.shimmerscale, items.bloodStainedBone];
+  items.shimmerscaleArmguards.quantities = [6, 4];
+  
+  items.coarseLeatherArmguards.materials = [items.coarseLeather, items.bloodStainedBone];
+  items.coarseLeatherArmguards.quantities = [6, 4];
+
   let stepOneItem;
   if (linenBracers < scaleBracers && linenBracers < leatherBracers)
-    stepOneItem = items.tidesprayLinenBracers.alt;
+    stepOneItem = items.tidesprayLinenBracers;
   else if (scaleBracers < linenBracers && scaleBracers < leatherBracers)
-    stepOneItem = items.shimmerscaleArmguards.alt;
+    stepOneItem = items.shimmerscaleArmguards;
   else
-    stepOneItem = items.coarseLeatherArmguards.alt;
+    stepOneItem = items.coarseLeatherArmguards;
 
   let linenBracersArr = [items.tidesprayLinenBracers, items.tidesprayLinen, 10, items.nylonThread, 5];
   let scaleBracersArr = [items.shimmerscaleArmguards, items.shimmerscale, 6, items.bloodStainedBone, 4];
@@ -220,7 +237,7 @@ $.getJSON("./assets/js/auctions.json", ahData => {
   let stepOneItemsArr = [linenBracersArr, scaleBracersArr, leatherBracersArr];
 
   $.each(stepOneItemsArr, (i, v) => printItemCard(v, "#stepOneInnerRow"));
-  $(`#stepOneInnerRow .card:contains('${stepOneItem}')`).addClass("cheapest");
+  $(`#stepOneInnerRow .card:contains('${stepOneItem.alt}')`).addClass("cheapest");
 
   /* End of Step One */
 
@@ -249,11 +266,11 @@ $.getJSON("./assets/js/auctions.json", ahData => {
 
   let stepThreeItem;
   if (satin < leather && satin < scale)
-    stepThreeItem = items.honorSatin.alt;
+    stepThreeItem = items.honorSatin;
   else if (leather < satin && leather < scale)
-    stepThreeItem = items.honorLeather.alt;
+    stepThreeItem = items.honorLeather;
   else
-    stepThreeItem = items.honorMail.alt;
+    stepThreeItem = items.honorMail;
 
   let honorSatinArr = [items.honorSatin, items.deepSeaSatin, 22, items.nylonThread, 8, items.expulsom, 1];
   let honorLeatherArr = [items.honorLeather, items.tempestHide, 12, items.calcifiedBone, 8, items.expulsom, 1];
@@ -262,7 +279,7 @@ $.getJSON("./assets/js/auctions.json", ahData => {
   let stepThreeItemsArr = [honorSatinArr, honorLeatherArr, honorMailArr];
 
   $.each(stepThreeItemsArr, (i, v) => printItemCard(v, "#stepThreeInnerRow"));
-  $(`#stepThreeInnerRow .card:contains("${stepThreeItem}")`).addClass("cheapest");
+  $(`#stepThreeInnerRow .card:contains("${stepThreeItem.alt}")`).addClass("cheapest");
 
   /* End of Step Three */
 
@@ -275,4 +292,28 @@ $.getJSON("./assets/js/auctions.json", ahData => {
 
   // Move the price columns to the right
   $(".col-6:odd").addClass("text-right");
+
+  $(".modal input:submit").click(() => {
+    $(".results").empty();
+    let numBracers = $("#numBracers").val();
+    let greenBracers = Math.floor(numBracers * 0.85);
+    let blueBracers = numBracers - greenBracers;
+    let gloomReturn = Math.floor(greenBracers * 0.27);
+    let umbraReturn = Math.floor(blueBracers * 2.2);
+    let veiledReturn = Math.floor(blueBracers * 0.25);
+    let total = numBracers * stepOneItem.average;
+
+    for (let i = 0; i < stepOneItem.materials.length; i++) {
+      $(`<p>You will need ${numBracers * stepOneItem.quantities[i]} ${stepOneItem.materials[i].alt} = ${getGSCString((numBracers * stepOneItem.quantities[i]) * stepOneItem.materials[i].average)}</p>`).appendTo(".results");
+    }
+    $(`<p>Total Cost: ${getGSCString(total)}</p>`).appendTo(".results");
+
+    let expReturn = Math.floor(greenBracers * .15);
+    $(`<p>Assuming a rate of 15% rare bracers, you will have:</p><p>${greenBracers} green bracers to scrap</p><p>${blueBracers} rare bracers to disenchant</p>`).appendTo(".results");
+    $(`<p>After processing, this will yield:</p>`).appendTo(".results");
+    $(`<p>${expReturn} Expulsom = ${getGSCString(expReturn * items.expulsom.average)}</p>`).appendTo(".results");
+    $(`<p>${gloomReturn} Gloom Dust = ${getGSCString(gloomReturn * items.gloomDust.average)}</p>`).appendTo(".results");
+    $(`<p>${umbraReturn} Umbra Shard = ${getGSCString(umbraReturn * items.umbraShard.average)}</p>`).appendTo(".results");
+    $(`<p>${veiledReturn} Veiled Crystal = ${getGSCString(veiledReturn * items.veiledCrystal.average)}</p>`).appendTo(".results");
+  });
 });

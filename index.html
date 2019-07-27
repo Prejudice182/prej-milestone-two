@@ -17,6 +17,28 @@
 <body>
 
     <h1 class="text-center">World of Warcraft Bracer Shuffle</h1>
+    <div class="text-center">
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#calculateModal">Calculate!</button>
+    </div>
+
+    <div class="modal fade text-center" id="calculateModal" tabindex="-1" role="dialog" aria-labelledby="calculateModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="calculateModalLabel">Calculate Your Returns!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    How many bracers would you like to make?
+                    <input type="number" min="1" max="9999" name="numBracers" id="numBracers" value="1" required>
+                    <input type="submit" value="Calculate!">
+                    <div class="results"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="container-fluid" id="root">
         <div class="row py-3" id="stepOneRow">
