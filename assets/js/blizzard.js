@@ -71,13 +71,13 @@ const getItemIcon = itemID => {
 const getItemQuality = itemID => {
   return getToken().then(token => {
     return fetch(
-      `https://eu.api.blizzard.com/data/wow/item/${itemID}?namespace=static-eu&locale=en_GB`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }).then(response => response.json())
-      .then(response => { 
+        `https://eu.api.blizzard.com/data/wow/item/${itemID}?namespace=static-eu&locale=en_GB`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }).then(response => response.json())
+      .then(response => {
         return response.quality.name.toLowerCase();
       });
   });
@@ -97,7 +97,7 @@ let names = ["coarseLeather", "tidesprayLinen", "deepSeaSatin", "shimmerscale", 
 let ids = [152541, 152576, 152577, 153050, 153051, 154164, 154165, 154722, 159959, 152875, 152876, 152877, 154692, 154153, 154145, 152668, 159916, 159888, 159893];
 let icons = ["coarseleather.jpg", "tidespraylinen.jpg", "deepseasatin.jpg", "shimmerscale.jpg", "mistscale.jpg", "bloodstainedbone.jpg", "calcifiedbone.jpg", "tempesthide.jpg", "nylonthread.jpg", "gloomdust.jpg", "umbrashard.jpg", "veiledcrystal.jpg", "tsbracers.jpg", "ssbracers.jpg", "clbracers.jpg", "expulsom.jpg", "honorSatin.jpg", "honorLeather.jpg", "honorMail.jpg"];
 let alts = ["Coarse Leather", "Tidespray Linen", "Deep Sea Satin", "Shimmerscale", "Mistscale", "Blood-Stained Bone", "Calcified Bone", "Tempest Hide", "Nylon Thread", "Gloom Dust", "Umbra Shard", "Veiled Crystal", "Tidespray Linen Bracers", "Shimmerscale Armguards", "Coarse Leather Armguards", "Expulsom", "Honorable Combatant's Satin Bracers", "Honorable Combatant's Leather Armguards", "Honorable Combatant's Mail Armguards"];
-let qualities = ["common", "common", "uncommon", "common","uncommon","common","uncommon","uncommon","common","common","rare","epic","uncommon","uncommon","uncommon","rare","rare","rare","rare"];
+let qualities = ["common", "common", "uncommon", "common", "uncommon", "common", "uncommon", "uncommon", "common", "common", "rare", "epic", "uncommon", "uncommon", "uncommon", "rare", "rare", "rare", "rare"];
 
 // Combine above arrays into objects
 const items = ids.reduce((o, k, i) => ({
@@ -150,30 +150,29 @@ const getAveragePrice = () => {
 }
 
 // Takes an array of items, and prints their information to the page using jQuery
-const printItemCard = (arr, element) => {
-  let craftedItem = arr.shift();
+const printItemCard = (item, element) => {
   $(`
   <div class="col-xl-4 py-2">
     <div class="card">
       <div class="card-header">
-        <a href="https://www.wowhead.com/item=${craftedItem.id}" class="${craftedItem.quality}" target="blank" rel="noopener"><img src="${craftedItem.icon}" alt="${craftedItem.alt}" class="img-fluid img-header"><span class="float-right">${craftedItem.alt}</span></a>
+        <a href="https://www.wowhead.com/item=${item.id}" class="${item.quality}" target="blank" rel="noopener"><img src="${item.icon}" alt="${item.alt}" class="img-fluid img-header"><span class="float-right">${item.alt}</span></a>
       </div>
-      <div class="card-body" id="${craftedItem.id}">
+      <div class="card-body" id="${item.id}">
       </div>
       <div class="card-footer text-center">
-        Crafting Cost: ${getGSCString(craftedItem.average)}
+        Crafting Cost: ${getGSCString(item.average)}
       </div>
     </div>
   </div>`).appendTo($(element));
-  for (let i = 0; i < arr.length - 1; i += 2) {
+  for (let i = 0; i < item.materials.length; i++) {
     $(`<div class="row align-items-baseline py-1">
         <div class="col-6">
-          <a href="https://www.wowhead.com/item=${arr[i].id}" class="${arr[i].quality}" target="blank" rel="noopener"><img src="${arr[i].icon}" alt="${arr[i].alt}">${arr[i].alt}</a> x ${arr[i+1]}
+          <a href="https://www.wowhead.com/item=${item.materials[i].id}" class="${item.materials[i].quality}" target="blank" rel="noopener"><img src="${item.materials[i].icon}" alt="${item.materials[i].alt}">${item.materials[i].alt}</a> x ${item.quantities[i]}
         </div>
         <div class="col-6">
-          Average Price: ${getGSCString(arr[i].average)}
+          Average Price: ${getGSCString(item.materials[i].average)}
         </div>
-      </div>`).appendTo($("#" + craftedItem.id));
+      </div>`).appendTo($("#" + item.id));
   }
 }
 
@@ -192,6 +191,14 @@ const printMaterialCard = (mat, element) => {
   </div>`).appendTo($(element));
 }
 
+const getCraftingCost = item => {
+  let cost = 0;
+  for (let i = 0; i < item.materials.length; i++)
+    cost += item.quantities[i] * item.materials[i].average;
+  item.average = cost;
+  return cost;
+}
+
 $.getJSON("./assets/js/auctions.json", ahData => {
   let auctions = ahData.auctions;
   getItemsData(auctions);
@@ -208,51 +215,46 @@ $.getJSON("./assets/js/auctions.json", ahData => {
 
   /* Step One Calculations and Display */
 
-  // Set average price to crafting cost instead of Auction House price 
-  let linenBracers = items.tidesprayLinenBracers.average = (items.tidesprayLinen.average * 10) + (items.nylonThread.average * 5);
-  let scaleBracers = items.shimmerscaleArmguards.average = (items.shimmerscale.average * 6) + (items.bloodStainedBone.average * 4);
-  let leatherBracers = items.coarseLeatherArmguards.average = (items.coarseLeather.average * 6) + (items.bloodStainedBone.average * 4);
-
+  // Set average price to crafting cost instead of Auction House price
   items.tidesprayLinenBracers.materials = [items.tidesprayLinen, items.nylonThread];
   items.tidesprayLinenBracers.quantities = [10, 5];
-  
+
   items.shimmerscaleArmguards.materials = [items.shimmerscale, items.bloodStainedBone];
   items.shimmerscaleArmguards.quantities = [6, 4];
-  
+
   items.coarseLeatherArmguards.materials = [items.coarseLeather, items.bloodStainedBone];
   items.coarseLeatherArmguards.quantities = [6, 4];
 
+  $.each([items.tidesprayLinenBracers, items.shimmerscaleArmguards, items.coarseLeatherArmguards], (i, v) => {
+    getCraftingCost(v);
+    printItemCard(v, "#stepOneInnerRow");
+  });
+
   let stepOneItem;
-  if (linenBracers < scaleBracers && linenBracers < leatherBracers)
+  if (items.tidesprayLinenBracers.average < items.shimmerscaleArmguards.average && items.tidesprayLinenBracers.average < items.coarseLeatherArmguards.average)
     stepOneItem = items.tidesprayLinenBracers;
-  else if (scaleBracers < linenBracers && scaleBracers < leatherBracers)
+  else if (items.shimmerscaleArmguards.average < items.tidesprayLinenBracers.average && items.shimmerscaleArmguards.average < items.coarseLeatherArmguards.average)
     stepOneItem = items.shimmerscaleArmguards;
   else
     stepOneItem = items.coarseLeatherArmguards;
 
-  let linenBracersArr = [items.tidesprayLinenBracers, items.tidesprayLinen, 10, items.nylonThread, 5];
-  let scaleBracersArr = [items.shimmerscaleArmguards, items.shimmerscale, 6, items.bloodStainedBone, 4];
-  let leatherBracersArr = [items.coarseLeatherArmguards, items.coarseLeather, 6, items.bloodStainedBone, 4];
-
-  let stepOneItemsArr = [linenBracersArr, scaleBracersArr, leatherBracersArr];
-
-  $.each(stepOneItemsArr, (i, v) => printItemCard(v, "#stepOneInnerRow"));
   $(`#stepOneInnerRow .card:contains('${stepOneItem.alt}')`).addClass("cheapest");
 
   /* End of Step One */
 
   /* Step Two Calculations and Display */
 
-  // Set Expulsom average to the cheapest bracer crafting cost, divided by 0.15 as per chance of receiving one per scrap
-  items.expulsom.average = Math.min(items.tidesprayLinenBracers.average, items.shimmerscaleArmguards.average, items.coarseLeatherArmguards.average) / 0.15;
-  
+  // Set Expulsom average to the cheapest bracer crafting cost, minus the cost of returned materials, multiplied by 6.55 as the chance of getting one is on average 1 in 6.55
+  let scrapReturn = (stepOneItem.alt === "Tidespray Linen Bracers") ? 1.51*(stepOneItem.materials[0].average + stepOneItem.materials[1].average) : (1.55 * stepOneItem.materials[0].average) + (0.6 * stepOneItem.materials[1].average);
+  items.expulsom.average = (stepOneItem.average - scrapReturn) * 6.55; 
+
   // Special case for expulsom being the only item in a row
   $(`<div class="card">
     <div class="card-header">
       <a href="https://www.wowhead.com/item=${items.expulsom.id}" class="${items.expulsom.quality}" target="blank" rel="noopener"><img src="${items.expulsom.icon}" alt="${items.expulsom.alt}" class="img-header"><span class="float-right">${items.expulsom.alt}</span></a>
     </div>
     <div class="card-body text-center pb-3">
-      Cost @ 15% chance of receiving Expulsom: ${getGSCString(items.expulsom.average)}
+      Min Crafting Cost: ${getGSCString(items.expulsom.average)}
     </div>
   </div>`).appendTo("#stepTwoCol");
 
@@ -260,25 +262,28 @@ $.getJSON("./assets/js/auctions.json", ahData => {
 
   /* Step Three Calculations and Display */
 
-  let satin = items.honorSatin.average = (items.deepSeaSatin.average * 22) + (items.nylonThread.average * 8) + items.expulsom.average;
-  let leather = items.honorLeather.average = (items.tempestHide.average * 12) + (items.calcifiedBone.average * 8) + items.expulsom.average;
-  let scale = items.honorMail.average = (items.mistscale.average * 12) + (items.calcifiedBone.average * 8) + items.expulsom.average;
+  items.honorSatin.materials = [items.deepSeaSatin, items.nylonThread, items.expulsom];
+  items.honorSatin.quantities = [22, 8, 1];
+
+  items.honorMail.materials = [items.mistscale, items.calcifiedBone, items.expulsom];
+  items.honorMail.quantities = [12, 8, 1];
+
+  items.honorLeather.materials = [items.tempestHide, items.calcifiedBone, items.expulsom];
+  items.honorLeather.quantities = [12, 8, 1];
+
+  $.each([items.honorSatin, items.honorMail, items.honorLeather], (i, v) => {
+    getCraftingCost(v);
+    printItemCard(v, "#stepThreeInnerRow");
+  });
 
   let stepThreeItem;
-  if (satin < leather && satin < scale)
+  if (items.honorSatin.average < items.honorMail.average && items.honorSatin.average < items.honorLeather.average)
     stepThreeItem = items.honorSatin;
-  else if (leather < satin && leather < scale)
-    stepThreeItem = items.honorLeather;
-  else
+  else if (items.honorMail.average < items.honorSatin.average && items.honorMail.average < items.honorLeather.average)
     stepThreeItem = items.honorMail;
+  else
+    stepThreeItem = items.honorLeather;
 
-  let honorSatinArr = [items.honorSatin, items.deepSeaSatin, 22, items.nylonThread, 8, items.expulsom, 1];
-  let honorLeatherArr = [items.honorLeather, items.tempestHide, 12, items.calcifiedBone, 8, items.expulsom, 1];
-  let honorMailArr = [items.honorMail, items.mistscale, 12, items.calcifiedBone, 8, items.expulsom, 1];
-
-  let stepThreeItemsArr = [honorSatinArr, honorLeatherArr, honorMailArr];
-
-  $.each(stepThreeItemsArr, (i, v) => printItemCard(v, "#stepThreeInnerRow"));
   $(`#stepThreeInnerRow .card:contains("${stepThreeItem.alt}")`).addClass("cheapest");
 
   /* End of Step Three */
@@ -287,7 +292,7 @@ $.getJSON("./assets/js/auctions.json", ahData => {
   let stepFourItems = [items.gloomDust, items.umbraShard, items.veiledCrystal];
 
   $.each(stepFourItems, (i, v) => printMaterialCard(v, "#stepFourInnerRow"));
-  
+
   /* End of Step Four */
 
   // Move the price columns to the right
