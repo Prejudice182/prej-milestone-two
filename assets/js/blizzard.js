@@ -298,27 +298,46 @@ $.getJSON("./assets/js/auctions.json", ahData => {
   // Move the price columns to the right
   $(".col-6:odd").addClass("text-right");
 
-  $(".modal input:submit").click(() => {
-    $(".results").empty();
+  // Empty results when modal is closed
+  $("#calculateModal").on("hide.bs.modal", e => $("#resultsContainer").empty());
+
+  // Display calculated returns/costs/profits when amount of bracers is specified
+  $("#calculateModal input:submit").click(() => {
+    $("#resultsContainer").empty();
     let numBracers = $("#numBracers").val();
-    let greenBracers = Math.floor(numBracers * 0.85);
+    let greenBracers = Math.ceil(numBracers * 0.85);
     let blueBracers = numBracers - greenBracers;
-    let gloomReturn = Math.floor(greenBracers * 0.27);
+    let gloomReturn = Math.ceil(blueBracers * 0.27);
     let umbraReturn = Math.floor(blueBracers * 2.2);
     let veiledReturn = Math.floor(blueBracers * 0.25);
+    let expReturn = Math.floor(greenBracers * 0.15);
+    let scraps = greenBracers * scrapReturn;
     let total = numBracers * stepOneItem.average;
 
+    $(`<h4 class="text-center">Materials Needed:</h4>`).appendTo("#resultsContainer");
     for (let i = 0; i < stepOneItem.materials.length; i++) {
-      $(`<p>You will need ${numBracers * stepOneItem.quantities[i]} ${stepOneItem.materials[i].alt} = ${getGSCString((numBracers * stepOneItem.quantities[i]) * stepOneItem.materials[i].average)}</p>`).appendTo(".results");
+      $(`
+      <div class="row">
+        <div class="col-6">
+          ${numBracers * stepOneItem.quantities[i]} ${stepOneItem.materials[i].alt}
+        </div>
+        <div class="col-6">
+          ${getGSCString((numBracers * stepOneItem.quantities[i]) * stepOneItem.materials[i].average)}
+        </div>
+      </div>`).appendTo("#resultsContainer");
     }
-    $(`<p>Total Cost: ${getGSCString(total)}</p>`).appendTo(".results");
 
-    let expReturn = Math.floor(greenBracers * .15);
-    $(`<p>Assuming a rate of 15% rare bracers, you will have:</p><p>${greenBracers} green bracers to scrap</p><p>${blueBracers} rare bracers to disenchant</p>`).appendTo(".results");
-    $(`<p>After processing, this will yield:</p>`).appendTo(".results");
-    $(`<p>${expReturn} Expulsom = ${getGSCString(expReturn * items.expulsom.average)}</p>`).appendTo(".results");
-    $(`<p>${gloomReturn} Gloom Dust = ${getGSCString(gloomReturn * items.gloomDust.average)}</p>`).appendTo(".results");
-    $(`<p>${umbraReturn} Umbra Shard = ${getGSCString(umbraReturn * items.umbraShard.average)}</p>`).appendTo(".results");
-    $(`<p>${veiledReturn} Veiled Crystal = ${getGSCString(veiledReturn * items.veiledCrystal.average)}</p>`).appendTo(".results");
+    $(`<div class="row"><div class="col-12">Step One Cost: ${getGSCString(total)}</div></div>`).appendTo("#resultsContainer");
+
+    $(`<h4>After Crafting:</h4><div class="row"><div class="col">${greenBracers} green bracers to scrap</div></div><div class="row"><div class="col">${blueBracers} rare bracers to disenchant</div></div>`).appendTo("#resultsContainer");
+
+    $(`<h4>After Processing:</h4>`).appendTo("#resultsContainer");
+    $(`<div class="row"><div class="col-6">${expReturn} Expulsom</div><div class="col-6">${getGSCString(expReturn * items.expulsom.average)}</div></div>`).appendTo("#resultsContainer");
+    $(`<div class="row"><div class="col-6">Materials</div><div class="col-6">${getGSCString(scraps)}</div></div>`).appendTo("#resultsContainer");
+    $(`<div class="row"><div class="col-6">${gloomReturn} Gloom Dust</div><div class="col-6">${getGSCString(gloomReturn * items.gloomDust.average)}</div></div>`).appendTo("#resultsContainer");
+    $(`<div class="row"><div class="col-6">${umbraReturn} Umbra Shard</div><div class="col-6">${getGSCString(umbraReturn * items.umbraShard.average)}</div></div>`).appendTo("#resultsContainer");
+    $(`<div class="row"><div class="col-6">${veiledReturn} Veiled Crystal</div><div class="col-6">${getGSCString(veiledReturn * items.veiledCrystal.average)}</div></div>`).appendTo("#resultsContainer");
+    total = total - (expReturn * items.expulsom.average) - (gloomReturn * items.gloomDust.average) - (umbraReturn * items.umbraShard.average) - (veiledReturn * items.veiledCrystal.average) - scraps;
+    $(`<h4>${(total < 0) ? "Profit:" : "Loss:"}</h4><p>${(total < 0) ? getGSCString(total*-1) : getGSCString(total)}</p>`).appendTo("#resultsContainer");
   });
 });
