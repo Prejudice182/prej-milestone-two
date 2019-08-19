@@ -127,7 +127,7 @@ const getGSCString = value => {
   let gold = Math.floor(value / 10000);
   let silver = Math.floor((value % 10000) / 100);
   let copper = Math.floor(value % 100);
-  return `${gold}<span class="gold">g</span> ${silver}<span class="silver">s</span> ${copper}<span class="copper">c</span>`;
+  return `${gold}<span class="gold"> g</span> ${silver}<span class="silver"> s</span> ${copper}<span class="copper"> c</span>`;
 }
 
 // Get average value of an array (Credit: https://codeburst.io/javascript-arrays-finding-the-minimum-maximum-sum-average-values-f02f1b0ce332)
@@ -215,7 +215,7 @@ $.getJSON("./assets/js/auctions.json", ahData => {
 
   /* Step One Calculations and Display */
 
-  // Set average price to crafting cost instead of Auction House price
+  // Set materials for each bracer and their quantities
   items.tidesprayLinenBracers.materials = [items.tidesprayLinen, items.nylonThread];
   items.tidesprayLinenBracers.quantities = [10, 5];
 
@@ -225,11 +225,13 @@ $.getJSON("./assets/js/auctions.json", ahData => {
   items.coarseLeatherArmguards.materials = [items.coarseLeather, items.bloodStainedBone];
   items.coarseLeatherArmguards.quantities = [6, 4];
 
+  // Get crafting cost and print item to page
   $.each([items.tidesprayLinenBracers, items.shimmerscaleArmguards, items.coarseLeatherArmguards], (i, v) => {
     getCraftingCost(v);
     printItemCard(v, "#stepOneInnerRow");
   });
 
+  // Find the cheapest item, and highlight its border
   let stepOneItem;
   if (items.tidesprayLinenBracers.average < items.shimmerscaleArmguards.average && items.tidesprayLinenBracers.average < items.coarseLeatherArmguards.average)
     stepOneItem = items.tidesprayLinenBracers;
@@ -262,6 +264,7 @@ $.getJSON("./assets/js/auctions.json", ahData => {
 
   /* Step Three Calculations and Display */
 
+  // Set materials for each bracer and their quantities
   items.honorSatin.materials = [items.deepSeaSatin, items.nylonThread, items.expulsom];
   items.honorSatin.quantities = [22, 8, 1];
 
@@ -271,11 +274,13 @@ $.getJSON("./assets/js/auctions.json", ahData => {
   items.honorLeather.materials = [items.tempestHide, items.calcifiedBone, items.expulsom];
   items.honorLeather.quantities = [12, 8, 1];
 
+  // Get crafting cost and print item to page
   $.each([items.honorSatin, items.honorMail, items.honorLeather], (i, v) => {
     getCraftingCost(v);
     printItemCard(v, "#stepThreeInnerRow");
   });
 
+  // Find the cheapest item, and highlight its border
   let stepThreeItem;
   if (items.honorSatin.average < items.honorMail.average && items.honorSatin.average < items.honorLeather.average)
     stepThreeItem = items.honorSatin;
@@ -297,6 +302,9 @@ $.getJSON("./assets/js/auctions.json", ahData => {
 
   // Move the price columns to the right
   $(".col-6:odd").addClass("text-right");
+
+  //Show help modal on page load
+  $("#helpModal").modal("toggle");
 
   // Empty results when modal is closed
   $("#calculateModal").on("hide.bs.modal", e => $("#resultsContainer").empty());

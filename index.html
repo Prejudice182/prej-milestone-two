@@ -6,8 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Blizzard API Test</title>
-    <!-- Bootstrap CSS Requires-->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Bootstrap CSS Requires -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Titillium+Web&display=swap" rel="stylesheet">
     <!-- My own styles -->
@@ -15,13 +19,15 @@
 </head>
 
 <body>
-
+    <a class="d-inline-block h3" id="helpButton" data-toggle="modal" data-target="#helpModal"><i
+            class="far fa-question-circle"></i></a>
     <h1 class="text-center">World of Warcraft Bracer Shuffle</h1>
     <div class="text-center">
-        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#calculateModal">Calculate!</button>
+        <button type="button" class="btn btn-info calculate" data-toggle="modal" data-target="#calculateModal">Calculate!</button>
     </div>
-
-    <div class="modal fade text-center" id="calculateModal" tabindex="-1" role="dialog" aria-labelledby="calculateModalLabel" aria-hidden="true">
+    <!-- Calculation modal-->
+    <div class="modal fade text-center" id="calculateModal" tabindex="-1" role="dialog"
+        aria-labelledby="calculateModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -31,17 +37,51 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    How many bracers would you like to make?
+                    <p>How many bracers would you like to make?</p>
                     <input type="number" min="1" max="9999" name="numBracers" id="numBracers" value="1" required>
-                    <input type="submit" value="Calculate!">
+                    <input type="submit" value="Calculate!" class="d-block mx-auto">
                     <div class="container-fluid" id="resultsContainer"></div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Instructions modal -->
+    <div class="modal fade text-center" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="helpModalLabel">How To Use This Page!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-justify pb-4"><img src="./assets/img/scrapping.jpg" alt="Scrapping">This page is for players of World of Warcraft. In game, there are professions where users can
+                        craft items and sell them on to other players.
+                        Instead of selling them on, crafters can proceed to break down these items by "scrapping", which
+                        sometimes rewards a material needed for higher
+                        end crafts. This enables players to make the higher end items, which in turn break down via
+                        aother process known as "disenchanting" to more valuable
+                        materials then were initially used.
+                    </div>
+                    <img src="./assets/img/disenchant.jpg" alt="Disenchant">
+                    <div class="text-justify">On first load, the page will display the prices and crafting costs of all items used in the
+                        entire process. A gold border will be placed around the items
+                        with the cheapest crafting cost. Players are free to disregard this information if they don't
+                        have the required profession. If they wish for more in-depth
+                        breakdown, they can click the "Calculate!" button, where they can input how many bracers they
+                        would like to craft, and get an estimated total cost, and a
+                        summary of the estimated returns from scrapping and disenchanting the bracers.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container-fluid" id="root">
-        <div class="row py-3" id="stepOneRow">
+        <div class="row py-2" id="stepOneRow">
             <div class="col" id="stepOneCol">
                 <h3 class="text-center">Step 1: Craft Cheapest Bracer!</h3>
                 <div class="row" id="stepOneInnerRow"></div>
@@ -50,11 +90,11 @@
 
         <div class="row justify-content-center pb-3" id="stepTwoRow">
             <div class="col-xl-4" id="stepTwoCol">
-                <h3 class="text-center pb-3">Step 2: Scrap Green Bracers!</h3>
+                <h3 class="text-center pb-2">Step 2: Scrap Green Bracers!</h3>
             </div>
         </div>
 
-        <div class="row py-3" id="stepThreeRow">
+        <div class="row py-2" id="stepThreeRow">
             <div class="col" id="stepThreeCol">
                 <h3 class="text-center">Step 3: Craft Cheapest Honorable Bracer!</h3>
                 <div class="row" id="stepThreeInnerRow"></div>
@@ -70,9 +110,14 @@
     </div>
 
     <!-- Bootstrap JS Requires -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
 
     <!-- My own code -->
     <script type="text/javascript" src="./assets/js/blizzard.js"></script>

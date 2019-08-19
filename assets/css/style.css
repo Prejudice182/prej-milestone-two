@@ -4,9 +4,18 @@ body {
     font-family: 'Titillium Web', sans-serif;
 }
 
-.card-header, .card-footer {
+a,
+a:hover {
+    text-decoration: none;
+}
+
+/* Card Styles */
+
+.card-header,
+.card-footer {
     border: 0;
     background: 0;
+    padding-top: 0.5rem;
 }
 
 .card {
@@ -27,11 +36,13 @@ body {
     margin-right: 10px;
 }
 
-img.img-header {
+.card .img-header {
     width: 48px;
     height: 48px;
     margin: -25px 0 0 -10px;
 }
+
+/* Colors */
 
 .gold {
     color: #ddb100;
@@ -43,11 +54,6 @@ img.img-header {
 
 .copper {
     color: #c8602c;
-}
-
-a,
-a:hover {
-    text-decoration: none;
 }
 
 .common,
@@ -74,6 +80,67 @@ a:hover {
     border: 1px solid gold;
 }
 
-.modal {
-    color: #000;
+/* Button styles */
+
+.calculate {
+    background-color: #070c21;
+    border: 1px solid #2c3870;
+    -webkit-transition: background-color .3s, border .3s;
+    -o-transition: background-color .3s, border .3s;
+    transition: background-color .3s, border .3s;
+}
+
+.calculate:hover {
+    background-color: #2c3870;
+    border: 1px solid #1b1f30;
+}
+
+/* Modal styles */
+
+.modal-header {
+    border: 0;
+}
+
+.modal-content {
+    color: #fff;
+    background-color: #3d3d3d;
+}
+
+.close {
+    color: #fff;
+}
+
+.modal-body img {
+    width: 48px;
+    height: 48px;
+    border: 1px solid #fff;
+    border-radius: 15%;
+    margin: 6px 10px 0 0;
+    float: left;
+}
+
+.modal-body img:nth-child(2) {
+    border: 2px solid gold;
+}
+
+/* Help Modal Button */
+
+#helpButton {
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    border-radius: 50%;
+    padding: 6px 0;
+    position: fixed;
+    top: 5px;
+    right: 10px;
+    color: #fff;
+    -webkit-transition: color .3s;
+    -o-transition: color .3s;
+    transition: color .3s;
+}
+
+#helpButton:hover, .close:hover {
+    color: #d5d5d5;
+    cursor: pointer;
 }
