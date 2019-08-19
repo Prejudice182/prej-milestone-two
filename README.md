@@ -62,7 +62,9 @@ I proceeded to try write another function to get the data from the JSON file pro
 
 As I now had the auctions data, I now had to decided how to look through it for the items I was interested in. I created objects for each item I needed prices for, and looped through the data checking for matching item IDs. Once this was sorted, I needed to average out the prices, but sometimes players can skew this data by putting items on the Auction House for extortionate amounts. I added a median function as well, and choose the cheapest value between the two.
 
-I then set about displaying the data. I chose Bootstrap cards for the layout, and then broke each item down into its respective materials and amounts. 
+I then set about displaying the data. I chose Bootstrap cards for the layout, and then broke each item down into its respective materials and amounts. I was pretty happy with the page at this point, so I invited some feedback from the slack channel, [#peer-code-review](https://code-institute-room.slack.com/messages/CGWQJQKC5). It was then pointed out that my "interactive" project had no interactivity.
+
+After this, I decided to add a calculate modal, to give users a sense of how much their desired crafting would cost them, and how much they could expect to get in return. I also added a help modal, to let users know the basics of using the page.
 
 ## Deployment
 
