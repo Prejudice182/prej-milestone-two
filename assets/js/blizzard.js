@@ -340,11 +340,11 @@ $.getJSON("./assets/js/auctions.json", ahData => {
     $(`<h4>After Crafting:</h4><div class="row"><div class="col">${greenBracers} green bracers to scrap</div></div><div class="row"><div class="col">${blueBracers} rare bracers to disenchant</div></div>`).appendTo("#resultsContainer");
 
     $(`<h4>After Processing:</h4>`).appendTo("#resultsContainer");
-    $(`<div class="row"><div class="col-6">${expReturn} Expulsom</div><div class="col-6">${getGSCString(expReturn * items.expulsom.average)}</div></div>`).appendTo("#resultsContainer");
-    $(`<div class="row"><div class="col-6">Materials</div><div class="col-6">${getGSCString(scraps)}</div></div>`).appendTo("#resultsContainer");
-    $(`<div class="row"><div class="col-6">${gloomReturn} Gloom Dust</div><div class="col-6">${getGSCString(gloomReturn * items.gloomDust.average)}</div></div>`).appendTo("#resultsContainer");
-    $(`<div class="row"><div class="col-6">${umbraReturn} Umbra Shard</div><div class="col-6">${getGSCString(umbraReturn * items.umbraShard.average)}</div></div>`).appendTo("#resultsContainer");
-    $(`<div class="row"><div class="col-6">${veiledReturn} Veiled Crystal</div><div class="col-6">${getGSCString(veiledReturn * items.veiledCrystal.average)}</div></div>`).appendTo("#resultsContainer");
+    expReturn > 0 ? $(`<div class="row"><div class="col-6">${expReturn} Expulsom</div><div class="col-6">${getGSCString(expReturn * items.expulsom.average)}</div></div>`).appendTo("#resultsContainer") : "";
+    scraps > 0 ? $(`<div class="row"><div class="col-6">Materials</div><div class="col-6">${getGSCString(scraps)}</div></div>`).appendTo("#resultsContainer") : "";
+    gloomReturn > 0 ? $(`<div class="row"><div class="col-6">${gloomReturn} Gloom Dust</div><div class="col-6">${getGSCString(gloomReturn * items.gloomDust.average)}</div></div>`).appendTo("#resultsContainer") : "";
+    umbraReturn > 0 ? $(`<div class="row"><div class="col-6">${umbraReturn} Umbra Shard</div><div class="col-6">${getGSCString(umbraReturn * items.umbraShard.average)}</div></div>`).appendTo("#resultsContainer") : "";
+    veiledReturn > 0 ? $(`<div class="row"><div class="col-6">${veiledReturn} Veiled Crystal</div><div class="col-6">${getGSCString(veiledReturn * items.veiledCrystal.average)}</div></div>`).appendTo("#resultsContainer") : "";
     total = total - (expReturn * items.expulsom.average) - (gloomReturn * items.gloomDust.average) - (umbraReturn * items.umbraShard.average) - (veiledReturn * items.veiledCrystal.average) - scraps;
     $(`<h4>${(total < 0) ? "Profit:" : "Loss:"}</h4><p>${(total < 0) ? getGSCString(total*-1) : getGSCString(total)}</p>`).appendTo("#resultsContainer");
   });
