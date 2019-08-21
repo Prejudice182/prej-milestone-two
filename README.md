@@ -22,9 +22,16 @@ When I was laying out this project, I wanted to make it as simple as possible, s
 
 - As a user, I want to know if the materials returned at the end of the shuffle are profitable.
 
+- As a beginner goldmaker, I want to see if the materials used in the shuffle are worth flipping for a profit
+
+- As an experienced goldmaker, I want to see how much expulsom will cost me to make, for higher end crafting
+
 
 I mocked up an early desktop-first layout using Balsamiq
-![mockup](./assets/mockups/mockup-1.png)
+![mockup](./assets/img/mockup-1.png)
+
+I tested for responsiveness using the site, [Am I Responsive?](http://ami.responsivedesign.is/)
+![responsiveness](./assets/img/responsive.png)
 
 ## Features
 
@@ -33,6 +40,7 @@ I mocked up an early desktop-first layout using Balsamiq
 - Cards - shows the materials used to craft each item and quantity needed
 - Links - lets users browse on to Wowhead, a fansite with a wealth of information on each item
 - Icons - lets players quickly identify an item if they are used to the game
+- Modals - provide interactiveness with a cost calculator and display help
 
 ### Features Left to Implement
 
@@ -51,6 +59,8 @@ I mocked up an early desktop-first layout using Balsamiq
     - Used for DOM manipulation
 - [Blizzard API](https://develop.battle.net/)
     - Used to retrieve auction house data, item info
+- [Am I Responsive](http://ami.responsivedesign.is/)
+    - Used to test for responsiveness across different device sizes
 
 ## Testing
 

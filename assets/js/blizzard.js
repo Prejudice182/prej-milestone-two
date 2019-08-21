@@ -12,6 +12,7 @@ formData.append("grant_type", "client_credentials");
 
 let token = null;
 
+// Send client ID and secret to Blizzard, retrieve auth token
 const getToken = () => {
   if (token === null || token.expires_at < Date.now()) {
     return window
@@ -35,6 +36,7 @@ const getToken = () => {
   }
 };
 
+// Get Auction House dump URL for a realm, default to Ragnaros if no realm argument specified
 const getDumpURL = (realm = "ragnaros") => {
   return getToken().then(token => {
     return window
@@ -53,6 +55,7 @@ const getDumpURL = (realm = "ragnaros") => {
   });
 };
 
+// Get the link to an items icon on Blizzard servers, so we can download to avoid hotlinking
 const getItemIcon = itemID => {
   return getToken().then(token => {
     return window.fetch(
@@ -68,6 +71,7 @@ const getItemIcon = itemID => {
   });
 }
 
+// Returns the item quality for a given item ID, for colour purposes
 const getItemQuality = itemID => {
   return getToken().then(token => {
     return fetch(
@@ -191,6 +195,7 @@ const printMaterialCard = (mat, element) => {
   </div>`).appendTo($(element));
 }
 
+// Add up material costs to get combined crafting cost
 const getCraftingCost = item => {
   let cost = 0;
   for (let i = 0; i < item.materials.length; i++)
@@ -199,6 +204,7 @@ const getCraftingCost = item => {
   return cost;
 }
 
+// Do the legwork with auctions data and display
 $.getJSON("./assets/js/auctions.json", ahData => {
   let auctions = ahData.auctions;
   getItemsData(auctions);
@@ -339,6 +345,7 @@ $.getJSON("./assets/js/auctions.json", ahData => {
 
     $(`<h4>After Crafting:</h4><div class="row"><div class="col">${greenBracers} green bracers to scrap</div></div><div class="row"><div class="col">${blueBracers} rare bracers to disenchant</div></div>`).appendTo("#resultsContainer");
 
+    // Ternary statements to check for zero results
     $(`<h4>After Processing:</h4>`).appendTo("#resultsContainer");
     expReturn > 0 ? $(`<div class="row"><div class="col-6">${expReturn} Expulsom</div><div class="col-6">${getGSCString(expReturn * items.expulsom.average)}</div></div>`).appendTo("#resultsContainer") : "";
     scraps > 0 ? $(`<div class="row"><div class="col-6">Materials</div><div class="col-6">${getGSCString(scraps)}</div></div>`).appendTo("#resultsContainer") : "";
