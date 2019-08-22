@@ -69,7 +69,7 @@ const getItemIcon = itemID => {
         console.log(response.assets[0].value);
       });
   });
-}
+};
 
 // Returns the item quality for a given item ID, for colour purposes
 const getItemQuality = itemID => {
@@ -85,7 +85,7 @@ const getItemQuality = itemID => {
         return response.quality.name.toLowerCase();
       });
   });
-}
+};
 
 /*
 End of retrieval code. You can test this in your console if you would like to see it running.
@@ -124,7 +124,7 @@ const getItemsData = auctions => {
     if (items.hasOwnProperty(v.item))
       items[v.item].prices.push(pricePerItem);
   });
-}
+};
 
 // Convert number in readable string of gold, silver and copper
 const getGSCString = value => {
@@ -132,7 +132,7 @@ const getGSCString = value => {
   let silver = Math.floor((value % 10000) / 100);
   let copper = Math.floor(value % 100);
   return `${gold}<span class="gold"> g</span> ${silver}<span class="silver"> s</span> ${copper}<span class="copper"> c</span>`;
-}
+};
 
 // Get average value of an array (Credit: https://codeburst.io/javascript-arrays-finding-the-minimum-maximum-sum-average-values-f02f1b0ce332)
 const arrAvg = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
@@ -151,7 +151,7 @@ const getAveragePrice = () => {
     let med = arrMedian(v.prices);
     v.average = (avg < med) ? avg : med;
   });
-}
+};
 
 // Takes an array of items, and prints their information to the page using jQuery
 const printItemCard = (item, element) => {
@@ -178,7 +178,7 @@ const printItemCard = (item, element) => {
         </div>
       </div>`).appendTo($("#" + item.id));
   }
-}
+};
 
 // Takes a single item and prints a card with its information using jQuery
 const printMaterialCard = (mat, element) => {
@@ -193,7 +193,7 @@ const printMaterialCard = (mat, element) => {
       </div>
     </div>
   </div>`).appendTo($(element));
-}
+};
 
 // Add up material costs to get combined crafting cost
 const getCraftingCost = item => {
@@ -202,7 +202,7 @@ const getCraftingCost = item => {
     cost += item.quantities[i] * item.materials[i].average;
   item.average = cost;
   return cost;
-}
+};
 
 // Do the legwork with auctions data and display
 $.getJSON("./assets/js/auctions.json", ahData => {
